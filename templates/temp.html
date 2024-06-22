@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="{% static "js/htmx.min.js" %}"></script>
+
+</head>
+<body>
+    <h2>TESTING HTML CODE HERE </h2>
+
+    <button hx-get="{% url "temp_partial" %}" 
+    hx-target="#random" 
+    hx-swap="innerHTML" 
+    >CLICK </button>
+
+    <div id="random">
+        Random text to swap
+    </div>
+
+
+
+
+</body>
+</html>
