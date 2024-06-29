@@ -20,6 +20,18 @@
         Random text to swap
     </div>
 
+    <li class="nav-item">
+        <a class="nav-link" href="#"
+        hx-get="{% url "create_reply"%}"
+        hx-target="#random2"
+        hx-swap="innerHTML"
+        > Reply</a>
+    </li>
+
+    <div id="random2">
+        Random DEMO
+    </div>
+
 
 
 

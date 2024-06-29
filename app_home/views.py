@@ -8,14 +8,6 @@ from .forms import FriendRequestsForm,FriendsForm
 from django.http import JsonResponse
 
 @login_requirements()
-def like_post(request, post_id):
-    post = get_object_or_404(Posts, uid=post_id)
-    like, created = Like.objects.get_or_create(post=post, user=request.user.profile)
-    if not created:
-        like.delete()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-
-@login_requirements()
 def homepage(request):
     profile = request.user.profile
     all_post = Posts.objects.all()
@@ -165,30 +157,58 @@ def view_replies(request, cmnt_uid):
 
 
 @login_requirements()
-def view_comments(request, post_uid):
+def create_comments(request, post_uid):
     if request.htmx:
-        post = get_object_or_404(Posts,uid=post_uid.strip())
-        if request.method=="POST":
+        if request.method == "POST":
+            post = get_object_or_404(Posts, uid=post_uid.strip())
+            
             try:
-                # PROBLEM-- object comment not creating
-                profile= request.user.profile
-                comment=request.POST.get['content']
-                Comment.objects.create(
-                    user=profile,
-                    post=post,
-                    content=comment
-                )
+                comment_content = request.POST.get('content')
+                print(comment_content)
+                
+                if comment_content:
+                    profile = request.user.profile
+                    Comment.objects.create(
+                        user=profile,
+                        post=post,
+                        content=comment_content
+                    )
             except Exception as e:
-                print("ERROR ===>> ",e)
+                print("ERROR ===>> ", e)
         
-        context={
-            "data":post
+        context = {
+            "data": post
         }
-
         return render(request, "home/partials/comments.html", context)
     
-    return HttpResponse("Noting to show with this url",status=400)
+    return HttpResponse("Nothing to show with this url", status=400)
 
+
+@login_requirements()
+def create_reply(request):
+    if request.htmx:
+        return render(request, "home/partials/create_reply.html")
+    
+    return HttpResponse("Nothing to show with this url", status=400)
+
+# @login_requirements()
+# def add_reply(request):
+#     if request.htmx:
+#         if request.method=="POST":
+#             print(request.POST.get('content'))
+            
+#         return render(request, "home/partials/create_reply.html")
+    
+#     return HttpResponse("Nothing to show with this url", status=400)
+
+
+@login_requirements()
+def like_post(request, post_id):
+    post = get_object_or_404(Posts, uid=post_id)
+    like, created = Like.objects.get_or_create(post=post, user=request.user.profile)
+    if not created:
+        like.delete()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
 # =============== TEMPRORARY TESTING ROUTE ====================

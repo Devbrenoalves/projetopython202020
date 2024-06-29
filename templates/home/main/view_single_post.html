@@ -108,9 +108,9 @@
     <!-- Add Comment Form -->
     <form class="nav nav-item w-100 position-relative mb-2" method="POST" novalidate>
         {% csrf_token %}
-        <textarea data-autoresize="" class="form-control pe-5 bg-light" rows="1" placeholder="Add a comment..."></textarea>
+        <textarea name="content" data-autoresize="" class="form-control pe-5 bg-light" rows="1" placeholder="Add a comment..."></textarea>
         <button
-        hx-post="{% url "view_comments" data.uid %}"
+        hx-post="{% url "create_comments" data.uid %}"
         hx-target="#divchanger"
         hx-swap="innerHTML"
         class="nav-link bg-transparent px-3 position-absolute top-50 end-0 translate-middle-y border-0" type="submit">
@@ -147,7 +147,11 @@
                                 <a class="nav-link" href="#!"> Like (1)</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#!"> Reply</a>
+                                <a class="nav-link" href="#"
+                                hx-get="{% url "create_reply"%}"
+                                hx-target="#random2"
+                                hx-swap="innerHTML"
+                                > Reply</a>
                             </li>
                             <li class="nav-item">
                                 <a href="#" 
@@ -159,6 +163,7 @@
                             </li>
                         </ul>
                         <!-- Placeholder for nested comments -->
+                        <div id="random2"></div>
                         <div id="random"></div>
                     </div>
                 </div>
