@@ -223,8 +223,23 @@ def add_reply(request):
 
 @login_requirements()
 def make_a_post(request):
+
     if request.htmx:
-        return render(request, "home/partials/post_form.html")
+        if request.method=="POST":
+            form=CreatePostForm(request.POST, request.FILES)
+            if form.is_valid():
+                try:
+                    the_form = form.save(commit=False)
+                    the_form.author = request.user.profile
+                    the_form.save()
+                    return redirect("homepage")
+                except Exception as e:
+                    print("PROBLEM: --> ", e)
+        else:
+            form=CreatePostForm()
+        context={"form":form}
+        
+        return render(request, "home/partials/post_form.html", context)
     else:
         return HttpResponse("Nothing to show with this url", status=400)
 
