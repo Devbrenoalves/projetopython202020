@@ -10,8 +10,8 @@ urlpatterns = [
     
     path('view_replies/<str:cmnt_uid>/', views.view_replies, name='view_replies'),
     path('create_comments/<str:post_uid>/', views.create_comments, name='create_comments'),
-    path('create_reply/', views.create_reply, name='create_reply'),
-    # path('add_reply/', views.add_reply, name='add_reply'),
+    path('create_reply/<str:cmnt_uid>/', views.create_reply, name='create_reply'),
+    path('add_reply/', views.add_reply, name='add_reply'),
     
     path('temp/', views.temp, name="temp"),
     path('temp-p/', views.temp_partial, name="temp_partial"),

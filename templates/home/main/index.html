@@ -36,13 +36,21 @@
         <a href="#"> <img class="avatar-img rounded-circle" src="{{user.profile.profile_picture.url}}" alt=""> </a>
     </div>
     <!-- Post input -->
+    
+        
+    <a href="#"
+    data-bs-toggle="modal" data-bs-target="#modalCreateFeed"        
+    >
+
+    
     <form class="w-100" method="POST" novalidate >
         {% csrf_token %}
-        {% for field in form %}
+        {% for field in form %}            
         {{field}}
         {% endfor %}
         <button type="submit" class="btn btn-sm btn-primary mt-2">Post</button>
-    </form>
+    </form> 
+    </a>
     </div>
     <!-- Share feed toolbar START -->
     <ul class="nav nav-pills nav-stack small fw-normal">

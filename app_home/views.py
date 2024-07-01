@@ -185,21 +185,41 @@ def create_comments(request, post_uid):
 
 
 @login_requirements()
-def create_reply(request):
+def create_reply(request, cmnt_uid):
+    parent_comment = Comment.objects.get(uid=cmnt_uid.strip())
     if request.htmx:
-        return render(request, "home/partials/create_reply.html")
+        context = {
+            "parent":parent_comment
+        }
+        return render(request, "home/partials/reply_form.html", context)
     
     return HttpResponse("Nothing to show with this url", status=400)
 
-# @login_requirements()
-# def add_reply(request):
-#     if request.htmx:
-#         if request.method=="POST":
-#             print(request.POST.get('content'))
-            
-#         return render(request, "home/partials/create_reply.html")
+@login_requirements()
+def add_reply(request):
+    if request.htmx:
+        if request.method=="POST":
+            try:
+                the_reply=request.POST.get('the_reply')
+                main_post_uid=request.POST.get('main_post')            
+                parent_comment_uid=request.POST.get('parent_comment')            
+                parent_comment = get_object_or_404(Comment, uid=parent_comment_uid.strip())
+                the_post=get_object_or_404(Posts, uid=main_post_uid.strip())
+                Comment.objects.create(
+                    post=the_post,
+                    user=request.user.profile,
+                    content=the_reply,
+                    parent=parent_comment,
+                )
+            except Exception as e:
+                print("ERROR =>> "+e)
+
+        context={
+            "data":the_post
+        }
+        return render(request, "home/partials/comments.html", context)
     
-#     return HttpResponse("Nothing to show with this url", status=400)
+    return HttpResponse("Nothing to show with this url", status=400)
 
 
 @login_requirements()
