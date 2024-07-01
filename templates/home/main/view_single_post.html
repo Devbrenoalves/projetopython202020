@@ -105,19 +105,21 @@
 </div>
 
 <div class="col-lg-3">
+    
+    
     <div id="divchanger">
-
-    <!-- Add Comment Form -->
-    <form class="nav nav-item w-100 position-relative mb-2" method="POST" novalidate>
-        {% csrf_token %}
-        <textarea name="content" data-autoresize="" class="form-control pe-5 bg-light" rows="1" placeholder="Add a comment..."></textarea>
-        <button
-        hx-post="{% url "create_comments" data.uid %}"
-        class="nav-link bg-transparent px-3 position-absolute top-50 end-0 translate-middle-y border-0" type="submit">
+        <!-- Add Comment Form -->
+        <form class="nav nav-item w-100 position-relative mb-2" method="POST" novalidate>
+            {% csrf_token %}
+            <textarea name="content" data-autoresize="" class="form-control pe-5 bg-light" rows="1" placeholder="Add a comment..."></textarea>
+            <button
+            hx-post="{% url "create_comments" data.uid %}"
+            hx-target="#divchanger"
+            hx-swap="outerHTML"
+            class="nav-link bg-transparent px-3 position-absolute top-50 end-0 translate-middle-y border-0" type="submit">
             <i class="bi bi-send-fill"> </i>
         </button>
-    </form>
-    
+        </form>
         
         <ul class="comment-wrap list-unstyled">
             {% for comment in data.comments.all %}
@@ -161,8 +163,8 @@
                                 
                             </li>
                         </ul>
-                        <!-- Placeholder for nested comments -->
                         <div id="x-{{comment.uid}}"></div>
+                        <!-- Placeholder for nested comments -->
                         <div id="random-{{comment.uid}}"></div>
                     </div>
                 </div>

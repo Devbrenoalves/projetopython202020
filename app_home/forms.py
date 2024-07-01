@@ -8,7 +8,7 @@ from .models import PostImage, Posts, FriendRequests, Friends
 class CreatePostForm(forms.ModelForm):
     class Meta:
         model = Posts
-        fields=["content"]
+        fields=["content", "privacy"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -18,6 +18,12 @@ class CreatePostForm(forms.ModelForm):
             "rows":"2",
             "data-autoresize":"",
             "placeholder":"Share your thoughts..."
+            }
+        )
+        self.fields["privacy"].widget.attrs.update(
+            {
+            "class":"form-select js-choice choice-select-text-none",
+            "data-position":"top",            
             }
         )
 

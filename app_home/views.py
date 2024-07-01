@@ -163,8 +163,7 @@ def create_comments(request, post_uid):
             post = get_object_or_404(Posts, uid=post_uid.strip())
             
             try:
-                comment_content = request.POST.get('content')
-                print(comment_content)
+                comment_content = request.POST.get('content')                
                 
                 if comment_content:
                     profile = request.user.profile
@@ -222,6 +221,14 @@ def add_reply(request):
     return HttpResponse("Nothing to show with this url", status=400)
 
 
+@login_requirements()
+def make_a_post(request):
+    if request.htmx:
+        return render(request, "home/partials/post_form.html")
+    else:
+        return HttpResponse("Nothing to show with this url", status=400)
+
+# -----------------------------------
 @login_requirements()
 def like_post(request, post_id):
     post = get_object_or_404(Posts, uid=post_id)

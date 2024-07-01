@@ -2,17 +2,18 @@ import os
 from pathlib import Path
 
 # ------- COMMON CODE FOR HANDLE MEDA, STATIC and TEMPLATES ---------
-
+DEBUG = False
 BASE_DIR = Path(__file__).resolve().parent.parent
-STATIC_DIR = os.path.join(BASE_DIR , 'static')
+if DEBUG:
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+else:
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 TEMPLATE_DIR = os.path.join(BASE_DIR , 'templates')
 MEDIA_DIR = os.path.join(BASE_DIR , 'media')
 
-
 STATIC_URL = 'static/'
 MEDIA_URL = '/media/'
-
-STATICFILES_DIRS = [STATIC_DIR, ]
 
 MEDIA_ROOT = MEDIA_DIR
 
@@ -26,8 +27,7 @@ LOGIN_URL = "/auth/login/"
 #  --------------------------==========-------------------------------
 
 SECRET_KEY = 'django-insecure-&8$jipu$mg1ap2l!lv0fxu7^br^*341squ(uv(-z8=1#$_*_1-'
-DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost","127.0.0.1"]
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',

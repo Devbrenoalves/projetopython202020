@@ -31,26 +31,22 @@
 <!-- Share feed START -->
 <div class="card card-body">
     <div class="d-flex mb-3">
-    <!-- Avatar -->
+    
     <div class="avatar avatar-xs me-2">
         <a href="#"> <img class="avatar-img rounded-circle" src="{{user.profile.profile_picture.url}}" alt=""> </a>
     </div>
-    <!-- Post input -->
-    
-        
-    <a href="#"
-    data-bs-toggle="modal" data-bs-target="#modalCreateFeed"        
-    >
+            
+    <a id="thisone"
+    href="#" 
+    style="display: block;width: 100%;" 
+    class="btn btn-warning"
 
+    hx-get="{% url "make_a_post" %}"
+    hx-target="#thisone"
+    hx-swap="innerHTML"
+
+    >Create a post</a>
     
-    <form class="w-100" method="POST" novalidate >
-        {% csrf_token %}
-        {% for field in form %}            
-        {{field}}
-        {% endfor %}
-        <button type="submit" class="btn btn-sm btn-primary mt-2">Post</button>
-    </form> 
-    </a>
     </div>
     <!-- Share feed toolbar START -->
     <ul class="nav nav-pills nav-stack small fw-normal">
