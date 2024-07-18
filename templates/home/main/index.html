@@ -190,6 +190,7 @@
                     {% csrf_token %}
                     <input type="hidden" name="the_person" value="{{prsn.user.username}}">
                     <div class="card-footer p-2 border-0">
+                        PERSON - {{request_list}}
                         {% if prsn in request_list %}
                         <button type="button" class="btn btn-sm btn-primary-soft w-100"> Request sent </button>
                         <a href="#" class="btn btn-sm btn-danger-soft w-100 mt-1"> Cancel </a>

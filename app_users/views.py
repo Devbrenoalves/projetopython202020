@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout
+from django.contrib import messages
 
 from .forms import CommonRegistrationForm, ProfileForm
 from .models import Profile
@@ -12,7 +13,7 @@ def registration(request):
         form = CommonRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
-            print("Register done!")
+            messages.success(request,"Register done!")
             return redirect("login_page")
     else:
         form = CommonRegistrationForm()
@@ -54,9 +55,10 @@ def login_page(request):
         try:
             user = authenticate(email=username_or_email, password=password)
             login(request, user)
+            messages.success(request, "Log in success! Welcome.")
             return redirect("homepage")
         
         except Exception as e:
-            print("ERROR+=> ",e)
+            messages.error(request,f"ERROR+=> {e}")
 
     return render(request, "auth/login.html")

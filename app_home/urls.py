@@ -14,6 +14,7 @@ urlpatterns = [
     path('create_comments/<str:post_uid>/', views.create_comments, name='create_comments'),
     path('create_reply/<str:cmnt_uid>/', views.create_reply, name='create_reply'),
     path('add_reply/', views.add_reply, name='add_reply'),
+    path('search/', views.search, name='search'),
     
     path('temp/', views.temp, name="temp"),
     path('temp-p/', views.temp_partial, name="temp_partial"),

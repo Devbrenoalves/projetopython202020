@@ -1,0 +1,37 @@
+{% extends "home/base.html" %}
+{% block title %}Search - {{s_query}} {% endblock title %}
+{% block content %}
+<div class="col-md-8 col-lg-6 vstack gap-2">
+    <h4>Search results for : <span class="text-primary">{{s_query}}</span></h4>
+    <div class="card-body">
+
+        {% for ppl in search_results %}
+        <div class="card pt-2 pb-0 ml-2">
+            <div class="hstack gap-2 mb-3 ">
+                <!-- Avatar -->
+                <div class="avatar">
+                    <a href="#!"><img class="avatar-img rounded-circle" src="{{ppl.profile_picture.url}}" alt="profile"></a>
+                </div>
+                <!-- Title -->
+                <div class="overflow-hidden">
+                    <a class="h6 mb-0" href="#!">{{ppl.first_name}}</a>
+                    <p class="mb-0 small text-truncate">{{ppl.user.username}}</p>
+                    <p class="mb-0 small text-truncate">{{ppl.user.profile.bio|truncatechars:"150"}}</p>
+                </div>
+                <!-- Button -->
+                <a class="btn btn-info-soft rounded-circle icon-md ms-auto" href="{% url "accept_req" ppl.user.username %}"><i class="fa-solid fa-plus"> </i></a>
+                <div>
+                    <a class="btn btn-primary-soft rounded-circle icon-md ms-auto" href="#"><i class="bi bi-person"></i></a>                    
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+        <!-- View more button -->
+        <div class="d-grid mt-3">
+            <a class="btn btn-sm btn-primary-soft" href="#">View more</a>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

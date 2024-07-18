@@ -10,11 +10,18 @@ from .forms import FriendRequestsForm,FriendsForm
 
 @login_requirements()
 def homepage(request):
-    
+    # current loged in user profile
     profile = request.user.profile
+
     all_post = Posts.objects.all()
+    # we can add logic here to recomend the friend suggestion
     people = Profile.objects.all()
-    request_lists = [ x.author for x in FriendRequests.objects.filter(sender = profile) ]
+
+    # Filtering the friend request sended list to show in template
+    my_requests = FriendRequests.objects.filter(sender = profile)
+    request_lists = [ x.author for x in my_requests ]
+    
+    
     existing_friend_object = Friends.objects.filter(author=profile).first()
     friends = existing_friend_object.friend.all() if existing_friend_object else None
     
@@ -39,6 +46,7 @@ def homepage(request):
         "got_requests":got_requests,
         "friends":friends,
         "form":form,
+        # "my_requests":my_requests.filter(accepted=False),
     }
     return render(request, "home/main/index.html", context)
 
@@ -56,11 +64,11 @@ def accept_request(request, usr):
             friend_list.save()
             FriendRequests.objects.filter(sender=person, author=profile).delete()
             
-            messages.success(request, f" {person} friend request accepted!")
+            messages.success(request, f" {person}'s friend request accepted!")
 
         else:
             existing_object.friend.add(person)
-            messages.success(request, f" {person} friend added!")
+            messages.success(request, f"{person} added as friend!")
             FriendRequests.objects.filter(sender=person, author=profile).delete()
 
         # ---- ALSO ADDING FRIEND FOR THAT PERSON WHO REQUESTED ---->>>
@@ -260,6 +268,25 @@ def like_post(request, post_id):
         return render(request, "home/partials/liked.html", context)
     else:
         return HttpResponse("Go Back some server misleading!")
+
+
+# ---- WORKING - FROM - 18/07/2024 -----
+@login_requirements()
+def search(request):
+    '''
+    SEARCH FUNCTION - No parameter needed.
+    This funtion takes the search argument via GET method from the webpage
+    and match the charecter contains in the matched query or not.
+    '''
+    q = request.GET.get('q')
+    results = []
+    if q:
+        results = Profile.objects.filter(first_name__icontains=q)
+    context={
+        "search_results":results,
+        "s_query":q,
+    }
+    return render(request, "home/main/search.html", context)
 
 
 # =============== TEMPRORARY TESTING ROUTE ====================
