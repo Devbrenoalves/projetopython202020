@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 
 # ------- COMMON CODE FOR HANDLE MEDA, STATIC and TEMPLATES ---------
-DEBUG = False
+DEBUG = True
 BASE_DIR = Path(__file__).resolve().parent.parent
 if DEBUG:
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
@@ -73,6 +73,20 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'ashiqmyi_chatxity',
+#         'USER': 'ashiqmyi@localhost',
+#         'PASSWORD': '7102000@@@@@@',  # Replace with your actual password
+#         'HOST': 'localhost',  # Adjust if needed
+#         'PORT': '3306',
+#     }
+# }
+
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',

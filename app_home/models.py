@@ -1,3 +1,4 @@
+from typing import Iterable, Optional
 from django.db import models
 import uuid
 from app_users.models import Profile
@@ -24,6 +25,9 @@ class Posts(CommonBaseModel):
     author = models.ForeignKey( Profile ,on_delete=models.CASCADE)    
     content = models.TextField()
     privacy = models.CharField(max_length=50, choices=MODES, default="public")
+    
+    def is_liked_by_author(self):
+        return Like.objects.filter(post=self, user=self.author).exists()
 
     
     def __str__(self):
@@ -32,19 +36,19 @@ class Posts(CommonBaseModel):
 class PostImage(CommonBaseModel):
     post = models.ForeignKey(Posts, related_name='images', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='post_images/')
-    
 
 
 class Like(CommonBaseModel):
     post = models.ForeignKey(Posts, related_name='likes', on_delete=models.CASCADE)
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="liker_person")
 
+
     class Meta:
         unique_together = ('post', 'user')
 
     def __str__(self):
         return f"{self.user} likes post {self.post}"
-
+    
 
 class Comment(CommonBaseModel):
     post = models.ForeignKey(Posts, related_name='comments', on_delete=models.CASCADE)

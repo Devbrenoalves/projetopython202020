@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 urlpatterns = [
     path('',views.homepage, name="homepage"),
-    path('create/',views.create_post, name="create_post"),
+    # path('create/',views.create_post, name="create_post"),
     path('like/<str:post_id>/', views.like_post, name='like_post'),
     path('send-request/', views.send_friend_request, name="send_friend_request"),
     path('accept/<str:usr>/', views.accept_request, name="accept_req"),

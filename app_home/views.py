@@ -1,14 +1,16 @@
-from .utilities import login_required, login_requirements
+from .utilities import login_requirements
 from .forms import CreatePostForm
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponseRedirect, HttpResponse
+from django.contrib import messages
 
 from app_users.models import Profile
 from .models import Posts, Like, Comment, FriendRequests, Friends
 from .forms import FriendRequestsForm,FriendsForm
-from django.http import JsonResponse
+
 
 @login_requirements()
 def homepage(request):
+    
     profile = request.user.profile
     all_post = Posts.objects.all()
     people = Profile.objects.all()
@@ -24,6 +26,7 @@ def homepage(request):
             the_form = form.save(commit=False)
             the_form.author=profile
             the_form.save()
+            messages.success(request, "Post uploaded!")
             return redirect(request.path)
     else:
         form = CreatePostForm()
@@ -53,14 +56,11 @@ def accept_request(request, usr):
             friend_list.save()
             FriendRequests.objects.filter(sender=person, author=profile).delete()
             
-
-
-            
-            print("------------ CREATED AND ACCEPTED ----------")
+            messages.success(request, f" {person} friend request accepted!")
 
         else:
             existing_object.friend.add(person)
-            print("===== EXISTS SO ADDED FRIEND =====")
+            messages.success(request, f" {person} friend added!")
             FriendRequests.objects.filter(sender=person, author=profile).delete()
 
         # ---- ALSO ADDING FRIEND FOR THAT PERSON WHO REQUESTED ---->>>
@@ -71,15 +71,15 @@ def accept_request(request, usr):
             his_friend_list.save()
 
             FriendRequests.objects.filter(author=person, person=profile).delete()
-            print("------------ HIS CREATED AND ACCEPTED ----------")
+            # print("------------ HIS CREATED AND ACCEPTED ----------")
 
         else:
             persons_existing_object.friend.add(profile)
             FriendRequests.objects.filter(author=person, person=profile).delete()
-            print("===== HIS ALREADY EXISTS SO ADDED FRIEND =====")
+            # print("===== HIS ALREADY EXISTS SO ADDED FRIEND =====")
 
     except Exception as e:
-        print("ERROR ---->>>>>> ", e)
+        messages.error(request, f" {e} !")
 
     return redirect("homepage")
 
@@ -103,31 +103,33 @@ def send_friend_request(request):
                     sender=request.user.profile,
                     requested=True
                 )
-                print("SUCCESS SEND REQUEST")
+                messages.success(request, "SUCCESS SEND REQUEST!")
+                
             else:
-                print("FRIEND REQUEST ALREADY EXISTS")
+                messages.error(request, "FRIEND REQUEST ALREADY EXISTS!")
+                
             
             # Redirect back to the referring page
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         except Exception as e:
-            print(e)
+            messages.warning(request, f"{e}")
     
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
-@login_requirements()
-def create_post(request):
+# @login_requirements()
+# def create_post(request):
 
-    if request.method == "POST":
-        form = CreatePostForm(request.POST)
-    else:
-        form = CreatePostForm()
-    context = {
-        "form":form,
-    }
-    # if request.htmx:
-    #     return render(request, "home/partials/create_post.html", context)
-    # return render(request, "home/create_post.html", context)
-    return render(request, "home/partials/create_post.html", context)
+#     if request.method == "POST":
+#         form = CreatePostForm(request.POST)
+#     else:
+#         form = CreatePostForm()
+#     context = {
+#         "form":form,
+#     }
+#     # if request.htmx:
+#     #     return render(request, "home/partials/create_post.html", context)
+#     # return render(request, "home/create_post.html", context)
+#     return render(request, "home/partials/create_post.html", context)
 
 
 @login_requirements()
@@ -138,7 +140,7 @@ def view_one_post(request, p_id):
         context["data"]=data
 
     except Exception as e:
-        print("PROBLEM====>>> ",e)
+        messages.error(request, f" {e}!")
     
     return render(request, "home/main/view_single_post.html", context)
 
@@ -173,7 +175,7 @@ def create_comments(request, post_uid):
                         content=comment_content
                     )
             except Exception as e:
-                print("ERROR ===>> ", e)
+                messages.success(request, f" {e}!")
         
         context = {
             "data": post
@@ -211,7 +213,7 @@ def add_reply(request):
                     parent=parent_comment,
                 )
             except Exception as e:
-                print("ERROR =>> "+e)
+                messages.error(request, f" {e}!")
 
         context={
             "data":the_post
@@ -234,7 +236,7 @@ def make_a_post(request):
                     the_form.save()
                     return redirect("homepage")
                 except Exception as e:
-                    print("PROBLEM: --> ", e)
+                    messages.error(request, f" {e} !")
         else:
             form=CreatePostForm()
         context={"form":form}
@@ -250,7 +252,14 @@ def like_post(request, post_id):
     like, created = Like.objects.get_or_create(post=post, user=request.user.profile)
     if not created:
         like.delete()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    if request.htmx:
+        context={
+            "data": post,
+
+        }
+        return render(request, "home/partials/liked.html", context)
+    else:
+        return HttpResponse("Go Back some server misleading!")
 
 
 # =============== TEMPRORARY TESTING ROUTE ====================

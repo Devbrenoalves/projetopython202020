@@ -1,14 +1,11 @@
 {% extends "home/base.html" %}
 {% load static %}
 {% load ipost %}
-{% block title %}Home{% endblock title %}
-
+{% block title %}Feed{% endblock title %}
 {% block content %}
- 
 
 <!-- Main content START -->
 <div class="col-md-8 col-lg-6 vstack gap-4">
-
 
 <!-- Story START -->
 {% comment %} 
@@ -27,36 +24,21 @@
     {% endcomment %}
 <!-- Story END -->
 
-
 <!-- Share feed START -->
-<div class="card card-body">
-    <div class="d-flex mb-3">
-    
-    <div class="avatar avatar-xs me-2">
-        <a href="#"> <img class="avatar-img rounded-circle" src="{{user.profile.profile_picture.url}}" alt=""> </a>
-    </div>
-            
-    <a id="thisone"
-    href="#" 
-    style="display: block;width: 100%;" 
-    class="btn btn-warning"
-
-    hx-get="{% url "make_a_post" %}"
-    hx-target="#thisone"
-    hx-swap="outerHTML"
-
-    >Create a post</a>
-    
-    </div>
-    <!-- Share feed toolbar START -->
+<div class="card card-body">          
+        <a id="thisone"
+        href="#" 
+        style="display: block;width: 100%;background: transparent;" 
+        class="btn btn-warning text-primary"
+        hx-get="{% url "make_a_post" %}"
+        hx-target="#thisone"
+        hx-swap="outerHTML"
+        >Create a post</a>
     <ul class="nav nav-pills nav-stack small fw-normal">
-    
-    <li class="nav-item">
-        <a class="nav-link bg-light py-1 px-2 mb-0" href="#!" data-bs-toggle="modal" data-bs-target="#modalCreateFeed"> <i class="bi bi-emoji-smile-fill text-warning pe-2"></i>Feeling /Activity</a>
-    </li>
-    
+        <li class="nav-item mt-2">
+            <a class="nav-link bg-light py-1 px-2 mb-0" href="#" data-bs-toggle="modal" data-bs-target="#modalCreateFeed"> <i class="bi bi-emoji-smile-fill text-warning pe-2"></i>Feeling /Activity</a>
+        </li>
     </ul>
-    <!-- Share feed toolbar END -->
 </div>
 <!-- Share feed END -->
 
@@ -72,7 +54,7 @@
                     <h6 class="card-title mb-0"> <a href="#"> {{data.author}} </a></h6>
                     <div class="nav nav-divider">
                         <p class="nav-item mb-0 small">{{data.created_at}}</p>
-                        <span class="nav-item small" data-bs-toggle="tooltip" data-bs-placement="top" title="Public"> <i class="bi bi-globe"></i> </span>
+                        <span class="nav-item small" data-bs-toggle="tooltip" data-bs-placement="top" title="{{data.privacy.title}}"> <i class="bi bi-{% if data.privacy == 'public' %}globe{% elif data.privacy == 'friends' %}people {% else %}lock{% endif %}"></i> </span>
                     </div>
                 </div>
             </div>
@@ -82,7 +64,7 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardShareAction3">
                     <li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark fa-fw pe-2"></i>Save post</a></li>
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-person-x fa-fw pe-2"></i>Unfollow lori ferguson </a></li>
+                    <li><a class="dropdown-item" href="#"> <i class="bi bi-person-x fa-fw pe-2"></i>Unfollow Ashiq </a></li>
                     <li><a class="dropdown-item" href="#"> <i class="bi bi-x-circle fa-fw pe-2"></i>Hide post</a></li>
                     <li><a class="dropdown-item" href="#"> <i class="bi bi-slash-circle fa-fw pe-2"></i>Block</a></li>
                     <li>
@@ -93,7 +75,7 @@
             </div>
         </div>
     </div>
-    <div class="card-body">
+    <div class="card-body" id="target-{{data.uid}}">
         <p>{{data.content}}</p>
         <div class="d-flex justify-content-between">
             <div class="row g-3">
@@ -125,16 +107,23 @@
         </div>
         <ul class="nav nav-stack py-3 small">
             <li class="nav-item">
-                <a class="nav-link active text-secondary" href="#!"> <i class="bi bi-heart-fill me-1 icon-xs bg-danger text-white rounded-circle"></i> You and {{data.likes.count}} others </a>
+                <a class="nav-link active text-secondary" href="#!"> <i class="bi bi-heart-fill me-1 icon-xs bg-danger text-white rounded-circle"></i> Liked by {{data.likes.count}} people </a>
             </li>
             <li class="nav-item ms-sm-auto">
                 <a class="nav-link" href="{% url "view_one_post" data.uid %}"> <i class="bi bi-chat-fill pe-1"></i>Comments ({{data.comments.count}})</a>
             </li>
         </ul>
         <ul class="nav nav-pills nav-pills-light nav-fill nav-stack small border-top border-bottom py-1 mb-3">
-            <li class="nav-item">
-                <a class="nav-link mb-0 active" href="{% url 'like_post' data.uid %}" class="like-post"> <i class="bi bi-heart pe-1"></i>Liked ({{data.likes.count}})</a>
-                {% comment %} <a class="nav-link mb-0 active" href="" class="like-post"> <i class="bi bi-heart pe-1"></i>Liked ({{data.likes.count}})</a> {% endcomment %}
+            <li class="nav-item" >
+                <a class="nav-link mb-0 {% if data.is_liked_by_author %}active{% endif %}" 
+                {% comment %} href="{% url 'like_post' data.uid %}"  {% endcomment %}
+                hx-get="{% url 'like_post' data.uid %}" 
+                hx-swap="outerHTML" 
+                hx-target="#target-{{data.uid}}" 
+                class="like-post"> 
+                <i class="bi {% if data.is_liked_by_author %}bi-heart-fill{% else %}bi-heart{% endif %} pe-1"></i>
+                {% if data.is_liked_by_author %}Liked{% else %}Like{% endif %} ({{data.likes.count}})
+             </a>
             </li>
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link mb-0" id="cardShareAction4" data-bs-toggle="dropdown" aria-expanded="false">
@@ -156,35 +145,15 @@
             </li>
         </ul>
         <!-- Add Comment Form -->
-        {% comment %} <form action="{% url 'add_comment' data.uid %}" method="POST"> {% endcomment %}
-        <form action="" method="POST">
+        <form class="nav nav-item w-100 position-relative mb-2" method="POST" novalidate>
             {% csrf_token %}
-            {{ comment_form.as_p }}
-            <button type="submit" class="btn btn-primary">Add Comment</button>
+            <textarea name="content" data-autoresize="" class="form-control pe-5 bg-light" rows="1" placeholder="Add a comment..."></textarea>
+            <button
+            
+            class="nav-link bg-transparent px-3 position-absolute top-50 end-0 translate-middle-y border-0" type="submit">
+            <i class="bi bi-send-fill"> </i>
+        </button>
         </form>
-        <!-- Display Comments -->
-        <div class="comments-section mt-3">
-            {% for comment in data.comments.all %}
-            <div class="comment">
-                <p><strong>{{ comment.user }}</strong>: {{ comment.content }}</p>
-                <!-- Add Reply Form -->
-                {% comment %} <form action="{% url 'add_reply' comment.uid %}" method="POST" class="reply-form ms-4"> {% endcomment %}
-                <form action="" method="POST" class="reply-form ms-4">
-                    {% csrf_token %}
-                    {{ reply_form.as_p }}
-                    <button type="submit" class="btn btn-secondary btn-sm">Reply</button>
-                </form>
-                <!-- Display Replies -->
-                <div class="replies ms-4 mt-2">
-                    {% for reply in comment.replies.all %}
-                    <div class="reply">
-                        <p><strong>{{ reply.user }}</strong>: {{ reply.content }}</p>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endfor %}
-        </div>
     </div>
 </div>
 {% endfor %}
@@ -222,7 +191,8 @@
                     <input type="hidden" name="the_person" value="{{prsn.user.username}}">
                     <div class="card-footer p-2 border-0">
                         {% if prsn in request_list %}
-                        <button type="submit" class="btn btn-sm btn-primary-soft w-100"> Request sent </button>
+                        <button type="button" class="btn btn-sm btn-primary-soft w-100"> Request sent </button>
+                        <a href="#" class="btn btn-sm btn-danger-soft w-100 mt-1"> Cancel </a>
                         {% else %}
                         <button type="submit" class="btn btn-sm btn-primary-soft w-100"> Add friend </button>
                         {% endif %}
@@ -253,7 +223,7 @@
                     <h6 class="card-title mb-0"> <a href="#"> {{data.author}} </a></h6>
                     <div class="nav nav-divider">
                         <p class="nav-item mb-0 small">{{data.created_at}}</p>
-                        <span class="nav-item small" data-bs-toggle="tooltip" data-bs-placement="top" title="Public"> <i class="bi bi-globe"></i> </span>
+                        <span class="nav-item small" data-bs-toggle="tooltip" data-bs-placement="top" title="{{data.privacy.title}}"> <i class="bi bi-{% if data.privacy == 'public' %}globe{% elif data.privacy == 'friends' %}people {% else %}lock{% endif %}"></i> </span>
                     </div>
                 </div>
             </div>
@@ -274,7 +244,7 @@
             </div>
         </div>
     </div>
-    <div class="card-body">
+    <div class="card-body" id="target-{{data.uid}}">
         <p>{{data.content}}</p>
         <div class="d-flex justify-content-between">
             <div class="row g-3">
@@ -306,16 +276,22 @@
         </div>
         <ul class="nav nav-stack py-3 small">
             <li class="nav-item">
-                <a class="nav-link active text-secondary" href="#!"> <i class="bi bi-heart-fill me-1 icon-xs bg-danger text-white rounded-circle"></i> You and {{data.likes.count}} others </a>
-            </li>
+                <a class="nav-link active text-secondary" href="#!"> <i class="bi bi-heart-fill me-1 icon-xs bg-danger text-white rounded-circle"></i> Liked by {{data.likes.count}} people </a>
+            </li> 
             <li class="nav-item ms-sm-auto">
                 <a class="nav-link" href="{% url "view_one_post" data.uid %}"> <i class="bi bi-chat-fill pe-1"></i>Comments ({{data.comments.count}})</a>
             </li>
         </ul>
         <ul class="nav nav-pills nav-pills-light nav-fill nav-stack small border-top border-bottom py-1 mb-3">
-            <li class="nav-item">
-                <a class="nav-link mb-0 active" href="{% url 'like_post' data.uid %}" class="like-post"> <i class="bi bi-heart pe-1"></i>Liked ({{data.likes.count}})</a>
-                {% comment %} <a class="nav-link mb-0 active" href="" class="like-post"> <i class="bi bi-heart pe-1"></i>Liked ({{data.likes.count}})</a> {% endcomment %}
+            <li class="nav-item" >
+                <a class="nav-link mb-0 {% if data.is_liked_by_author %}active{% endif %}" 
+                hx-get="{% url 'like_post' data.uid %}" 
+                hx-swap="outerHTML" 
+                hx-target="#target-{{data.uid}}" 
+                class="like-post"> 
+                <i class="bi {% if data.is_liked_by_author %}bi-heart-fill{% else %}bi-heart{% endif %} pe-1"></i>
+                {% if data.is_liked_by_author %}Liked{% else %}Like{% endif %} ({{data.likes.count}})
+                </a>
             </li>
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link mb-0" id="cardShareAction4" data-bs-toggle="dropdown" aria-expanded="false">
@@ -337,35 +313,16 @@
             </li>
         </ul>
         <!-- Add Comment Form -->
-        <form action="{% url 'add_comment' data.uid %}" method="POST">
-        {% comment %} <form action="" method="POST"> {% endcomment %}
+        <form class="nav nav-item w-100 position-relative mb-2" method="POST" novalidate>
             {% csrf_token %}
-            {{ comment_form.as_p }}
-            <button type="submit" class="btn btn-primary">Add Comment</button>
+            <textarea name="content" data-autoresize="" class="form-control pe-5 bg-light" rows="1" placeholder="Add a comment..."></textarea>
+            <button
+            
+            class="nav-link bg-transparent px-3 position-absolute top-50 end-0 translate-middle-y border-0" type="submit">
+            <i class="bi bi-send-fill"> </i>
+        </button>
         </form>
-        <!-- Display Comments -->
-        <div class="comments-section mt-3">
-            {% for comment in data.comments.all %}
-            <div class="comment">
-                <p><strong>{{ comment.user }}</strong>: {{ comment.content }}</p>
-                <!-- Add Reply Form -->
-                <form action="{% url 'add_reply' comment.uid %}" method="POST" class="reply-form ms-4">
-                {% comment %} <form action="" method="POST" class="reply-form ms-4"> {% endcomment %}
-                    {% csrf_token %}
-                    {{ reply_form.as_p }}
-                    <button type="submit" class="btn btn-secondary btn-sm">Reply</button>
-                </form>
-                <!-- Display Replies -->
-                <div class="replies ms-4 mt-2">
-                    {% for reply in comment.replies.all %}
-                    <div class="reply">
-                        <p><strong>{{ reply.user }}</strong>: {{ reply.content }}</p>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+        
     </div>
 </div>
 {% endfor %}
@@ -452,7 +409,7 @@
                 <p class="mb-0 small text-truncate">{{frnd.user.username}}</p>
             </div>
             <!-- Button -->
-            <a class="btn btn-primary-soft rounded-circle icon-md ms-auto" href="#"><i class="bi bi-person-check-fill"> </i></a>
+            
             <a class="btn btn-primary-soft rounded-circle icon-md ms-auto" href="#"><i class="bi bi-chat-fill"></i></a>
         </div>
         <!-- Connection item END -->
