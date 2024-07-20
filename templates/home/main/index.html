@@ -4,6 +4,123 @@
 {% block title %}Feed{% endblock title %}
 {% block content %}
 
+
+<!-- Sidenav START -->
+<div class="col-lg-3">
+<!-- Advanced filter responsive toggler START -->
+<div class="d-flex align-items-center d-lg-none">
+    <button class="border-0 bg-transparent" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSideNavbar" aria-controls="offcanvasSideNavbar">
+    <span class="btn btn-primary"><i class="fa-solid fa-sliders-h"></i></span>
+    <span class="h6 mb-0 fw-bold d-lg-none ms-2">My profile</span>
+    </button>
+</div>
+<!-- Advanced filter responsive toggler END -->
+<!-- Navbar START-->
+<nav class="navbar navbar-expand-lg mx-0">
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasSideNavbar">
+    <!-- Offcanvas header -->
+    <div class="offcanvas-header">
+        <button type="button" class="btn-close text-reset ms-auto" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <!-- Offcanvas body -->
+    <div class="offcanvas-body d-block px-2 px-lg-0">
+        <!-- Card START -->
+        <div class="card overflow-hidden">
+        <!-- Cover image -->
+        <div class="h-50px" style="background-image:url({{user.profile.cover_photo.url}}); background-position: center; background-size: cover; background-repeat: no-repeat;"></div>
+        <!-- Card body START -->
+        <div class="card-body pt-0">
+            <div class="text-center">
+            <!-- Avatar -->
+            <div class="avatar avatar-lg mt-n5 mb-3">
+                <a href="{% url "view_profile" user.username %}"><img class="avatar-img rounded border border-white border-3" src="{{user.profile.profile_picture.url}}" alt="pic"></a>
+            </div>
+            <!-- Info -->
+            <h5 class="mb-0"> <a href="{% url "view_profile" user.username %}">{{user.profile.first_name}} {{user.profile.last_name}}</a> </h5>
+            <small>{{user.username}}</small>
+            <p class="mt-3">{{user.profile.bio}}</p>
+            <!-- User stat START -->
+            <div class="hstack gap-2 gap-xl-3 justify-content-center">
+                <!-- User stat item -->
+                <div>
+                <h6 class="mb-0">{{user.profile|mypost}}</h6>
+                <small>Post</small>
+                </div>
+                <!-- Divider -->
+                <div class="vr"></div>
+                <!-- User stat item -->
+                <div>
+                <h6 class="mb-0">{{user.profile|myfiends}}</h6>
+                <small>Friends</small>
+                </div>
+                <!-- Divider -->
+                <div class="vr"></div>
+                <!-- User stat item -->
+                <div>
+                <h6 class="mb-0">{{user.profile|mefollow}}</h6>
+                <small>Following</small>
+                </div>
+            </div>
+            <!-- User stat END -->
+            </div>
+            <!-- Divider -->
+            <hr>
+            <!-- Side Nav START -->
+            <ul class="nav nav-link-secondary flex-column fw-bold gap-2">
+            <li class="nav-item">
+                <a class="nav-link" href="#"> <img class="me-2 h-20px fa-fw" src="{% static "images/feed.svg" %}" alt=""><span>My Feed </span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"> <img class="me-2 h-20px fa-fw" src="{% static "images/group.svg" %}" alt=""><span>Groups </span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"> <img class="me-2 h-20px fa-fw" src="{% static "images/notify.svg" %}" alt=""><span>Notifications </span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#"> <img class="me-2 h-20px fa-fw" src="{% static "images/settings.svg" %}" alt=""><span>Settings </span></a>
+            </li>
+            </ul>
+            <!-- Side Nav END -->
+        </div>
+        <!-- Card body END -->
+        <!-- Card footer -->
+        <div class="card-footer text-center py-2">
+            <a class="btn btn-link btn-sm" href="#">View Profile </a>
+        </div>
+        </div>
+        <!-- Card END -->
+        <!-- Helper link START -->
+        <ul class="nav small mt-4 justify-content-center lh-1">
+        <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="#">Settings</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" target="_blank" href="#">Support </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" target="_blank" href="#">Docs </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="help.html">Help</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="privacy-and-terms.html">Privacy &amp; terms</a>
+        </li>
+        </ul>
+        <!-- Helper link END -->
+        <!-- Copyright -->
+        <p class="small text-center mt-1">©2024 <a class="text-reset" target="_blank" href="https://www.ChatXity.com/"> ChatXity </a></p>
+    </div>
+    </div>
+</nav>
+<!-- Navbar END-->
+</div>
+<!-- Sidenav END -->
+
+
 <!-- Main content START -->
 <div class="col-md-8 col-lg-6 vstack gap-4">
 
@@ -51,177 +168,7 @@
                     <a href="#"> <img class="avatar-img rounded-circle" src="{{data.author.profile_picture.url}}" alt=""> </a>
                 </div>
                 <div>
-                    <h6 class="card-title mb-0"> <a href="#"> {{data.author}} </a></h6>
-                    <div class="nav nav-divider">
-                        <p class="nav-item mb-0 small">{{data.created_at}}</p>
-                        <span class="nav-item small" data-bs-toggle="tooltip" data-bs-placement="top" title="{{data.privacy.title}}"> <i class="bi bi-{% if data.privacy == 'public' %}globe{% elif data.privacy == 'friends' %}people {% else %}lock{% endif %}"></i> </span>
-                    </div>
-                </div>
-            </div>
-            <div class="dropdown">
-                <a href="#" class="text-secondary btn btn-secondary-soft-hover py-1 px-2" id="cardShareAction3" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-three-dots"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardShareAction3">
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark fa-fw pe-2"></i>Save post</a></li>
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-person-x fa-fw pe-2"></i>Unfollow Ashiq </a></li>
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-x-circle fa-fw pe-2"></i>Hide post</a></li>
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-slash-circle fa-fw pe-2"></i>Block</a></li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-flag fa-fw pe-2"></i>Report post</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="card-body" id="target-{{data.uid}}">
-        <p>{{data.content}}</p>
-        <div class="d-flex justify-content-between">
-            <div class="row g-3">
-                {% for image in data.images.all|slice:":2" %}
-                <div class="col-6">
-                    <a class="h-100" href="{{image.image.url}}" data-glightbox="" data-gallery="image-popup">
-                        <img class="rounded img-fluid" src="{{image.image.url}}" alt="Image">
-                    </a>
-                </div>
-                {% endfor %}
-                <div class="col-6">
-                    {% for image in data.images.all|slice:"2:3" %}
-                    <a href="{{image.image.url}}" data-glightbox="" data-gallery="image-popup">
-                        <img class="rounded img-fluid" src="{{image.image.url}}" alt="Image">
-                    </a>
-                    {% endfor %}
-                    {% for image in data.images.all|slice:"3:4" %}
-                    <div class="position-relative bg-dark mt-3 rounded">
-                        <div class="hover-actions-item position-absolute top-50 start-50 translate-middle z-index-9">
-                            <a class="btn btn-link text-white" href="#"> View all </a>
-                        </div>
-                        <a href="{{image.image.url}}" data-glightbox="" data-gallery="image-popup">
-                            <img class="img-fluid opacity-50 rounded" src="{{image.image.url}}" alt="">
-                        </a>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-        <ul class="nav nav-stack py-3 small">
-            <li class="nav-item">
-                <a class="nav-link active text-secondary" href="#!"> <i class="bi bi-heart-fill me-1 icon-xs bg-danger text-white rounded-circle"></i> Liked by {{data.likes.count}} people </a>
-            </li>
-            <li class="nav-item ms-sm-auto">
-                <a class="nav-link" href="{% url "view_one_post" data.uid %}"> <i class="bi bi-chat-fill pe-1"></i>Comments ({{data.comments.count}})</a>
-            </li>
-        </ul>
-        <ul class="nav nav-pills nav-pills-light nav-fill nav-stack small border-top border-bottom py-1 mb-3">
-            <li class="nav-item" >
-                <a class="nav-link mb-0 {% if data.is_liked_by_author %}active{% endif %}" 
-                {% comment %} href="{% url 'like_post' data.uid %}"  {% endcomment %}
-                hx-get="{% url 'like_post' data.uid %}" 
-                hx-swap="outerHTML" 
-                hx-target="#target-{{data.uid}}" 
-                class="like-post"> 
-                <i class="bi {% if data.is_liked_by_author %}bi-heart-fill{% else %}bi-heart{% endif %} pe-1"></i>
-                {% if data.is_liked_by_author %}Liked{% else %}Like{% endif %} ({{data.likes.count}})
-             </a>
-            </li>
-            <li class="nav-item dropdown">
-                <a href="#" class="nav-link mb-0" id="cardShareAction4" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="bi bi-reply-fill flip-horizontal ps-1"></i>Share (3)
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardShareAction4">
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-envelope fa-fw pe-2"></i>Send via Direct Message</a></li>
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark-check fa-fw pe-2"></i>Bookmark </a></li>
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-link fa-fw pe-2"></i>Copy link to post</a></li>
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-share fa-fw pe-2"></i>Share post via …</a></li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li><a class="dropdown-item" href="#"> <i class="bi bi-pencil-square fa-fw pe-2"></i>Share to News Feed</a></li>
-                </ul>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link mb-0" href="#!"> <i class="bi bi-send-fill pe-1"></i>Send</a>
-            </li>
-        </ul>
-        <!-- Add Comment Form -->
-        <form class="nav nav-item w-100 position-relative mb-2" method="POST" novalidate>
-            {% csrf_token %}
-            <textarea name="content" data-autoresize="" class="form-control pe-5 bg-light" rows="1" placeholder="Add a comment..."></textarea>
-            <button
-            
-            class="nav-link bg-transparent px-3 position-absolute top-50 end-0 translate-middle-y border-0" type="submit">
-            <i class="bi bi-send-fill"> </i>
-        </button>
-        </form>
-    </div>
-</div>
-{% endfor %}
-
-<!-- Card feed item START -->
-<div class="card">
-    <!-- Card header START -->
-    <div class="card-header d-flex justify-content-between align-items-center border-0 pb-0">
-    <h6 class="card-title mb-0">People you may know</h6>
-    <button class="btn btn-sm btn-primary-soft"> See all </button>
-    </div>
-    <!-- Card header START -->
-    <!-- Card body START -->
-    <div class="card-body">
-    <div class="tiny-slider arrow-hover">
-        <div class="tiny-slider-inner ms-n4" data-arrow="true" data-dots="false" data-items-xl="3" data-items-lg="2" data-items-md="2" data-items-sm="2" data-items-xs="1" data-gutter="12" data-edge="30">
-        <!-- Slider items -->
-
-        {% for prsn in people %}
-        {% if prsn not in friends %}
-        <div>
-            <!-- Card add friend item START -->
-            <div class="card shadow-none text-center">
-                <!-- Card body -->
-                <div class="card-body p-2 pb-0">
-                    <div class="avatar avatar-xl">
-                        <a href="#!"><img class="avatar-img rounded-circle" src="{{prsn.profile_picture.url}}" alt=""></a>
-                    </div>
-                    <h6 class="card-title mb-1 mt-3"> <a href="#!"> {{prsn.first_name}} </a></h6>
-                    <p class="mb-0 small lh-sm">5 mutual connections</p>
-                </div>
-                <!-- Card footer -->
-                <form action="{% url "send_friend_request" %}" method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="the_person" value="{{prsn.user.username}}">
-                    <div class="card-footer p-2 border-0">
-                        PERSON - {{request_list}}
-                        {% if prsn in request_list %}
-                        <button type="button" class="btn btn-sm btn-primary-soft w-100"> Request sent </button>
-                        <a href="#" class="btn btn-sm btn-danger-soft w-100 mt-1"> Cancel </a>
-                        {% else %}
-                        <button type="submit" class="btn btn-sm btn-primary-soft w-100"> Add friend </button>
-                        {% endif %}
-                    </div>
-                </form>
-            </div>
-            <!-- Card add friend item END -->
-        </div>
-        {% endif %}
-        {% endfor %}
-
-        </div>
-    </div>
-    </div>
-    <!-- Card body END -->
-</div>
-<!-- Card feed item END -->
-
-{% for data in posts|slice:"5:" %}
-<div class="card">
-    <div class="card-header border-0 pb-0">
-        <div class="d-flex align-items-center justify-content-between">
-            <div class="d-flex align-items-center">
-                <div class="avatar me-2">
-                    <a href="#"> <img class="avatar-img rounded-circle" src="{{data.author.profile_picture.url}}" alt=""> </a>
-                </div>
-                <div>
-                    <h6 class="card-title mb-0"> <a href="#"> {{data.author}} </a></h6>
+                    <h6 class="card-title mb-0"> <a href="{% url "view_profile" data.author.user.username %}"> {{data.author}} </a></h6>
                     <div class="nav nav-divider">
                         <p class="nav-item mb-0 small">{{data.created_at}}</p>
                         <span class="nav-item small" data-bs-toggle="tooltip" data-bs-placement="top" title="{{data.privacy.title}}"> <i class="bi bi-{% if data.privacy == 'public' %}globe{% elif data.privacy == 'friends' %}people {% else %}lock{% endif %}"></i> </span>
@@ -248,24 +195,25 @@
     <div class="card-body" id="target-{{data.uid}}">
         <p>{{data.content}}</p>
         <div class="d-flex justify-content-between">
+
             <div class="row g-3">
-                {% for image in data.images.all|slice:":2" %}
+                {% for image in data.images.all|slice:":1" %}
                 <div class="col-6">
-                    <a class="h-100" href="{{image.image.url}}" data-glightbox="" data-gallery="image-popup">
+                    <a class="" href="{{image.image.url}}" data-glightbox="" data-gallery="image-popup">
                         <img class="rounded img-fluid" src="{{image.image.url}}" alt="Image">
                     </a>
                 </div>
                 {% endfor %}
                 <div class="col-6">
-                    {% for image in data.images.all|slice:"2:3" %}
+                    {% for image in data.images.all|slice:"1:2" %}
                     <a href="{{image.image.url}}" data-glightbox="" data-gallery="image-popup">
                         <img class="rounded img-fluid" src="{{image.image.url}}" alt="Image">
                     </a>
                     {% endfor %}
-                    {% for image in data.images.all|slice:"3:4" %}
+                    {% for image in data.images.all|slice:"2:3" %}
                     <div class="position-relative bg-dark mt-3 rounded">
                         <div class="hover-actions-item position-absolute top-50 start-50 translate-middle z-index-9">
-                            <a class="btn btn-link text-white" href="#"> View all </a>
+                            <a class="btn btn-link text-white" href="{% url "view_one_post" data.uid %}"> View all </a>
                         </div>
                         <a href="{{image.image.url}}" data-glightbox="" data-gallery="image-popup">
                             <img class="img-fluid opacity-50 rounded" src="{{image.image.url}}" alt="">
@@ -318,11 +266,186 @@
             {% csrf_token %}
             <textarea name="content" data-autoresize="" class="form-control pe-5 bg-light" rows="1" placeholder="Add a comment..."></textarea>
             <button
-            
+            hx-post="{% url "feed_comment" data.uid %}"
+            hx-target="#target-{{data.uid}}"
+            hx-swap="outerHTML"
             class="nav-link bg-transparent px-3 position-absolute top-50 end-0 translate-middle-y border-0" type="submit">
             <i class="bi bi-send-fill"> </i>
         </button>
         </form>
+        
+        
+    </div>
+</div>
+{% endfor %}
+
+<!-- Card feed item START -->
+<div class="card">
+    <!-- Card header START -->
+    <div class="card-header d-flex justify-content-between align-items-center border-0 pb-0">
+    <h6 class="card-title mb-0">People you may know</h6>
+    <button class="btn btn-sm btn-primary-soft"> See all </button>
+    </div>
+    <!-- Card header START -->
+    <!-- Card body START -->
+    <div class="card-body">
+    <div class="tiny-slider arrow-hover">
+        <div class="tiny-slider-inner ms-n4" data-arrow="true" data-dots="false" data-items-xl="3" data-items-lg="2" data-items-md="2" data-items-sm="2" data-items-xs="1" data-gutter="12" data-edge="30">
+        <!-- Slider items -->
+
+        {% for prsn in people %}
+        {% if prsn not in friends %}
+        <div>
+            <!-- Card add friend item START -->
+            <div class="card shadow-none text-center">
+                <!-- Card body -->
+                <div class="card-body p-2 pb-0">
+                    <div class="avatar avatar-xl">
+                        <a href="#!"><img class="avatar-img rounded-circle" src="{{prsn.profile_picture.url}}" alt=""></a>
+                    </div>
+                    <h6 class="card-title mb-1 mt-3"> <a href="#!"> {{prsn.first_name}} </a></h6>
+                    <p class="mb-0 small lh-sm">5 mutual connections</p>
+                </div>
+                <!-- Card footer -->
+                <form action="{% url "send_friend_request" %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="the_person" value="{{prsn.user.username}}">
+                    <div class="card-footer p-2 border-0">                        
+                        {% if prsn in request_list %}
+                        <button type="button" class="btn btn-sm btn-primary-soft w-100"> Request sent </button>
+                        <a href="#" class="btn btn-sm btn-danger-soft w-100 mt-1"> Cancel </a>
+                        {% else %}
+                        <button type="submit" class="btn btn-sm btn-primary-soft w-100"> Add friend </button>
+                        {% endif %}
+                    </div>
+                </form>
+            </div>
+            <!-- Card add friend item END -->
+        </div>
+        {% endif %}
+        {% endfor %}
+
+        </div>
+    </div>
+    </div>
+    <!-- Card body END -->
+</div>
+<!-- Card feed item END -->
+
+{% for data in posts|slice:"5:" %}
+<div class="card">
+    <div class="card-header border-0 pb-0">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <div class="avatar me-2">
+                    <a href="#"> <img class="avatar-img rounded-circle" src="{{data.author.profile_picture.url}}" alt=""> </a>
+                </div>
+                <div>
+                    <h6 class="card-title mb-0"> <a href="{% url "view_profile" data.author.user.username %}"> {{data.author}} </a></h6>
+                    <div class="nav nav-divider">
+                        <p class="nav-item mb-0 small">{{data.created_at}}</p>
+                        <span class="nav-item small" data-bs-toggle="tooltip" data-bs-placement="top" title="{{data.privacy.title}}"> <i class="bi bi-{% if data.privacy == 'public' %}globe{% elif data.privacy == 'friends' %}people {% else %}lock{% endif %}"></i> </span>
+                    </div>
+                </div>
+            </div>
+            <div class="dropdown">
+                <a href="#" class="text-secondary btn btn-secondary-soft-hover py-1 px-2" id="cardShareAction3" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-three-dots"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardShareAction3">
+                    <li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark fa-fw pe-2"></i>Save post</a></li>
+                    <li><a class="dropdown-item" href="#"> <i class="bi bi-person-x fa-fw pe-2"></i>Unfollow lori ferguson </a></li>
+                    <li><a class="dropdown-item" href="#"> <i class="bi bi-x-circle fa-fw pe-2"></i>Hide post</a></li>
+                    <li><a class="dropdown-item" href="#"> <i class="bi bi-slash-circle fa-fw pe-2"></i>Block</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="#"> <i class="bi bi-flag fa-fw pe-2"></i>Report post</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="card-body" id="target-{{data.uid}}">
+        <p>{{data.content}}</p>
+        <div class="d-flex justify-content-between">
+            <div class="row g-3">
+                {% for image in data.images.all|slice:":1" %}
+                <div class="col-6">
+                    <a class="" href="{{image.image.url}}" data-glightbox="" data-gallery="image-popup">
+                        <img class="rounded img-fluid" src="{{image.image.url}}" alt="Image">
+                    </a>
+                </div>
+                {% endfor %}
+                <div class="col-6">
+                    {% for image in data.images.all|slice:"1:2" %}
+                    <a href="{{image.image.url}}" data-glightbox="" data-gallery="image-popup">
+                        <img class="rounded img-fluid" src="{{image.image.url}}" alt="Image">
+                    </a>
+                    {% endfor %}
+                    {% for image in data.images.all|slice:"2:3" %}
+                    <div class="position-relative bg-dark mt-3 rounded">
+                        <div class="hover-actions-item position-absolute top-50 start-50 translate-middle z-index-9">
+                            <a class="btn btn-link text-white" href="{% url "view_one_post" data.uid %}"> View all </a>
+                        </div>
+                        <a href="{{image.image.url}}" data-glightbox="" data-gallery="image-popup">
+                            <img class="img-fluid opacity-50 rounded" src="{{image.image.url}}" alt="">
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>            
+        </div>
+        <ul class="nav nav-stack py-3 small">
+            <li class="nav-item">
+                <a class="nav-link active text-secondary" href="#!"> <i class="bi bi-heart-fill me-1 icon-xs bg-danger text-white rounded-circle"></i> Liked by {{data.likes.count}} people </a>
+            </li> 
+            <li class="nav-item ms-sm-auto">
+                <a class="nav-link" href="{% url "view_one_post" data.uid %}"> <i class="bi bi-chat-fill pe-1"></i>Comments ({{data.comments.count}})</a>
+            </li>
+        </ul>
+        <ul class="nav nav-pills nav-pills-light nav-fill nav-stack small border-top border-bottom py-1 mb-3">
+            <li class="nav-item" >
+                <a class="nav-link mb-0 {% if data.is_liked_by_author %}active{% endif %}" 
+                hx-get="{% url 'like_post' data.uid %}" 
+                hx-swap="outerHTML" 
+                hx-target="#target-{{data.uid}}" 
+                class="like-post"> 
+                <i class="bi {% if data.is_liked_by_author %}bi-heart-fill{% else %}bi-heart{% endif %} pe-1"></i>
+                {% if data.is_liked_by_author %}Liked{% else %}Like{% endif %} ({{data.likes.count}})
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link mb-0" id="cardShareAction4" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-reply-fill flip-horizontal ps-1"></i>Share (3)
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardShareAction4">
+                    <li><a class="dropdown-item" href="#"> <i class="bi bi-envelope fa-fw pe-2"></i>Send via Direct Message</a></li>
+                    <li><a class="dropdown-item" href="#"> <i class="bi bi-bookmark-check fa-fw pe-2"></i>Bookmark </a></li>
+                    <li><a class="dropdown-item" href="#"> <i class="bi bi-link fa-fw pe-2"></i>Copy link to post</a></li>
+                    <li><a class="dropdown-item" href="#"> <i class="bi bi-share fa-fw pe-2"></i>Share post via …</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item" href="#"> <i class="bi bi-pencil-square fa-fw pe-2"></i>Share to News Feed</a></li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link mb-0" href="#!"> <i class="bi bi-send-fill pe-1"></i>Send</a>
+            </li>
+        </ul>
+        <!-- Add Comment Form -->
+        <form class="nav nav-item w-100 position-relative mb-2" method="POST" novalidate>
+            {% csrf_token %}
+            <textarea name="content" data-autoresize="" class="form-control pe-5 bg-light" rows="1" placeholder="Add a comment..."></textarea>
+            <button
+            hx-post="{% url "feed_comment" data.uid %}"
+            hx-target="#target-{{data.uid}}"
+            hx-swap="outerHTML"
+            class="nav-link bg-transparent px-3 position-absolute top-50 end-0 translate-middle-y border-0" type="submit">
+            <i class="bi bi-send-fill"> </i>
+        </button>
+        </form>
+        
         
     </div>
 </div>

@@ -114,7 +114,7 @@ def send_friend_request(request):
                 messages.success(request, "SUCCESS SEND REQUEST!")
                 
             else:
-                messages.error(request, "FRIEND REQUEST ALREADY EXISTS!")
+                messages.error(request, "Already in friend request list!")
                 
             
             # Redirect back to the referring page
@@ -182,8 +182,9 @@ def create_comments(request, post_uid):
                         post=post,
                         content=comment_content
                     )
+                    messages.success(request,"You added a comment")
             except Exception as e:
-                messages.success(request, f" {e}!")
+                messages.warning(request, f" {e}!")
         
         context = {
             "data": post
@@ -270,23 +271,106 @@ def like_post(request, post_id):
         return HttpResponse("Go Back some server misleading!")
 
 
-# ---- WORKING - FROM - 18/07/2024 -----
+# ---- WORKING - FROM - 18/07/2024 ----- (DONE)
+# NOTE: The search functionality can be improved after develop Pages and Groups feature.
+# CAN IMPROVE: 2
+# ERROR/Bug: 0
 @login_requirements()
 def search(request):
     '''
     SEARCH FUNCTION - No parameter needed.
     This funtion takes the search argument via GET method from the webpage
-    and match the charecter contains in the matched query or not.
+    and match the charecter with username contains in the matched query or not.
     '''
+    profile = request.user.profile
     q = request.GET.get('q')
     results = []
+    frnd_reqs = FriendRequests.objects.filter(sender=profile, accepted=False)
+    got_reqs = FriendRequests.objects.filter(author=profile, accepted=False)
+    all_requested_people = [ x.sender for x in frnd_reqs ]+[ x.author for x in got_reqs]
+    
     if q:
+        # HERE HAVE TO IMPROVE TO FIND THE USER WITH MULTIPLE - username, f_name, L-name >>
         results = Profile.objects.filter(first_name__icontains=q)
     context={
         "search_results":results,
         "s_query":q,
+        "friend_req_or_sended":all_requested_people,
     }
+
     return render(request, "home/main/search.html", context)
+
+
+# ---- WORKING - FROM - 19/07/2024 ----- (DONE)
+# NOTE: Nothing
+# CAN IMPROVE: 2  | i) like to the comment ii) load more comment
+# ERROR/Bug: 1    | i) reply need to show 
+
+@login_requirements()
+def feed_comment(request, post_uid):
+    if request.htmx:
+        post = get_object_or_404(Posts, uid=post_uid.strip())
+        if request.method == "POST":
+            try:
+                comment_content = request.POST.get('content')                
+                
+                if comment_content:
+                    profile = request.user.profile
+                    Comment.objects.create(
+                        user=profile,
+                        post=post,
+                        content=comment_content
+                    )
+                    
+            except Exception as e:
+                print(f"ERROR - FEED COMMENT: {e}")
+                messages.warning(request, f" {e}!")
+        try:
+            my_comment = Comment.objects.filter(
+                user=profile,
+                post=post,
+                ).order_by("-created_at").first()
+            
+        except:
+            my_comment=None
+        context = {
+            "data": post,
+            "my_comment":my_comment,
+        }
+        # return redirect("homepage")
+        return render(request, "home/partials/feed_comment.html", context)
+    return HttpResponse("Don't lost in the --- MORICHIKA ---", status=400)
+
+
+# ---- WORKING - FROM - 19/07/2024 -----(RUNNING)
+# NOTE: Nothing
+# CAN IMPROVE: 5
+# ERROR/Bug: 1
+from .models import PostImage
+
+@login_requirements()
+def view_profile(request, name):
+    '''
+    The function for view user profile and detail.
+    '''
+    username = name.strip()
+    its_user_himself = False
+    profile = get_object_or_404(Profile, user__username = username)
+    all_post = Posts.objects.filter(author=profile)
+    all_photo = PostImage.objects.filter(post__author = profile)
+    if username == request.user.username:
+        its_user_himself = True
+
+    context={
+        "profile":profile,
+        "its_user_himself":its_user_himself,
+        "posts":all_post,
+        "all_photo":all_photo,
+    }
+    
+    return render(request, "home/main/view_profile.html", context)
+
+
 
 
 # =============== TEMPRORARY TESTING ROUTE ====================

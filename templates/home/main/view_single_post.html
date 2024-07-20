@@ -44,29 +44,20 @@
                 <div class="row g-3">
                     {% for image in data.images.all|slice:":2" %}
                     <div class="col-6">
-                        <a class="h-100" href="{{image.image.url}}" data-glightbox="" data-gallery="image-popup">
+                        <a class="" href="{{image.image.url}}" data-glightbox="" data-gallery="image-popup">
                             <img class="rounded img-fluid" src="{{image.image.url}}" alt="Image">
                         </a>
                     </div>
                     {% endfor %}
+                    {% for image in data.images.all|slice:"2:" %}
                     <div class="col-6">
-                        {% for image in data.images.all|slice:"2:3" %}
-                        <a href="{{image.image.url}}" data-glightbox="" data-gallery="image-popup">
+                        <a class="" href="{{image.image.url}}" data-glightbox="" data-gallery="image-popup">
                             <img class="rounded img-fluid" src="{{image.image.url}}" alt="Image">
                         </a>
-                        {% endfor %}
-                        {% for image in data.images.all|slice:"3:4" %}
-                        <div class="position-relative bg-dark mt-3 rounded">
-                            <div class="hover-actions-item position-absolute top-50 start-50 translate-middle z-index-9">
-                                <a class="btn btn-link text-white" href="#"> View all </a>
-                            </div>
-                            <a href="{{image.image.url}}" data-glightbox="" data-gallery="image-popup">
-                                <img class="img-fluid opacity-50 rounded" src="{{image.image.url}}" alt="">
-                            </a>
-                        </div>
-                        {% endfor %}
                     </div>
-                </div>
+                    {% endfor %}
+                    
+                </div>                
             </div>
             <ul class="nav nav-stack py-3 small">
                 <li class="nav-item">

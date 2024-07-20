@@ -77,7 +77,7 @@ class Story(CommonBaseModel):
 class Friends(CommonBaseModel):
     author = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='author')
     friend = models.ManyToManyField(Profile, related_name='friends')
-
+    privacy = models.CharField(max_length=50, choices=MODES, default="public")
     def __str__(self):
         return f"{self.author}'s friends"
 

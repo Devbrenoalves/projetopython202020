@@ -6,11 +6,11 @@
     <div class="card-body">
 
         {% for ppl in search_results %}
-        <div class="card pt-2 pb-0 ml-2">
-            <div class="hstack gap-2 mb-3 ">
+        <div class="card pt-2 pb-0 ">
+            <div class="hstack gap-2 mb-3 ms-2">
                 <!-- Avatar -->
                 <div class="avatar">
-                    <a href="#!"><img class="avatar-img rounded-circle" src="{{ppl.profile_picture.url}}" alt="profile"></a>
+                    <a href="#!"><img class="avatar-img rounded-circle " src="{{ppl.profile_picture.url}}" alt="profile"></a>
                 </div>
                 <!-- Title -->
                 <div class="overflow-hidden">
@@ -19,9 +19,18 @@
                     <p class="mb-0 small text-truncate">{{ppl.user.profile.bio|truncatechars:"150"}}</p>
                 </div>
                 <!-- Button -->
-                <a class="btn btn-info-soft rounded-circle icon-md ms-auto" href="{% url "accept_req" ppl.user.username %}"><i class="fa-solid fa-plus"> </i></a>
+                <a class="btn btn-info-soft rounded-circle icon-md ms-auto" href="#"><i class="fa-solid fa-plus"> </i></a>
                 <div>
-                    <a class="btn btn-primary-soft rounded-circle icon-md ms-auto" href="#"><i class="bi bi-person"></i></a>                    
+                    {% if ppl not in friend_req_or_sended %}
+                    <form action="{% url "send_friend_request" %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="the_person" value="{{ppl.user.username}}">
+                        <button type="submit" class="btn btn-primary-soft rounded-circle icon-md ms-auto" ><i class="bi bi-person"></i></button>                    
+                    </form>
+                    {% else %}
+                    <button type="button" class="btn btn-primary-soft rounded-circle icon-md ms-auto" ><i class="bi bi-pen"></i></button>                    
+                    
+                    {% endif %}
                 </div>
             </div>
         </div>

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'app_users',
     'app_chat',
     'app_home',
+    'app_account',
     'django_htmx',
 ]
 MIDDLEWARE = [
@@ -67,24 +68,23 @@ TEMPLATES = [
     },
 ]
 WSGI_APPLICATION = 'core.wsgi.application'
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'ashiqmyi_chatxity',
-#         'USER': 'ashiqmyi@localhost',
-#         'PASSWORD': '7102000@@@@@@',  # Replace with your actual password
-#         'HOST': 'localhost',  # Adjust if needed
-#         'PORT': '3306',
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'chatxity',
+        'USER': 'root',
+        'PASSWORD': '123456@@@@@@',
+        'HOST': 'localhost',
+    }
+}
 
 
 AUTH_PASSWORD_VALIDATORS = [

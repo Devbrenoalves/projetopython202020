@@ -1,3 +1,4 @@
+from typing import Iterable, Optional
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.utils import timezone
@@ -61,6 +62,7 @@ GENDER = [
 
 class Profile(CommonBaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=15)
@@ -68,9 +70,20 @@ class Profile(CommonBaseModel):
     birthday = models.DateField(blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, default="default.png")
     bio = models.CharField(max_length=300, null=True,blank=True)
-
+    cover_photo = models.ImageField(upload_to="cover_pic/",null=True, blank=True,default="cover.png")
     fill_up = models.BooleanField(default=False)
     registered = models.BooleanField(default=False)
+    
+    profession = models.CharField(max_length=50, null=True, blank=True)
+    address = models.CharField(max_length=250, null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.profile_picture:
+            self.profile_picture = "default.png"
+        if not self.cover_photo:
+            self.cover_photo = "cover.png"
+
+        return super().save(*args, **kwargs)
 
     def is_fully_filled(self):
         fields_names = [f.name for f in self._meta.get_fields()]

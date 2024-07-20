@@ -46,7 +46,7 @@ class CommonRegistrationForm(UserCreationForm):
 #                     self.fields[field].widget.attrs.update({'class': 'form-control', 'style':"height:250px;"})
 #                 else:
 #                     self.fields[field].widget.attrs.update({'class': 'form-control',})
-        
+ 
 
 class ProfileForm(forms.ModelForm):
     class Meta:
