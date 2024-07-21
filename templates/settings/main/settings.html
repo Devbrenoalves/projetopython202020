@@ -18,7 +18,7 @@
 				<!-- Advanced filter responsive toggler END -->
 
         <nav class="navbar navbar-light navbar-expand-lg mx-0">
-          <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNavbar">
+          <div class="offcanvas offcanvas-start" >
             <!-- Offcanvas header -->
 						<div class="offcanvas-header">
 							<button type="button" class="btn-close text-reset ms-auto" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -34,16 +34,33 @@
                 <!-- Side Nav START -->
                 <ul class="nav nav-tabs nav-pills nav-pills-soft flex-column fw-bold gap-2 border-0">
                   <li class="nav-item" data-bs-dismiss="offcanvas">
-                    <a class="nav-link d-flex mb-0 active" href="#nav-setting-tab-1" data-bs-toggle="tab"> <i class="bi bi-person me-2">  </i> <span> Account </span></a>
+                    <a 
+                    hx-get="{% url "setting_tabs" 'profile' %}"
+                    hx-target="#tab-option-to-change"
+                    hx-swap="innerHTML"
+                    class="nav-link d-flex mb-0 active"  data-bs-toggle="tab"> <i class="bi bi-person me-2">  </i> <span> Account </span></a>
                   </li>
                   <li class="nav-item" data-bs-dismiss="offcanvas">
-                    <a class="nav-link d-flex mb-0" href="#nav-setting-tab-2" data-bs-toggle="tab"> <i class="bi bi-bell me-2">  </i>  <span>Notification </span></a>
+                    <a 
+                    hx-get="{% url "setting_tabs" 'notify' %}"
+                    hx-target="#tab-option-to-change"
+                    hx-swap="innerHTML"
+                    
+                    class="nav-link d-flex mb-0" data-bs-toggle="tab"> <i class="bi bi-bell me-2">  </i>  <span>Notification </span></a>
                   </li>
                   <li class="nav-item" data-bs-dismiss="offcanvas">
-                    <a class="nav-link d-flex mb-0" href="#nav-setting-tab-3" data-bs-toggle="tab"> <i class="bi bi-gear me-2">  </i> <span>Privacy and safety </span></a>
+                    <a 
+                    hx-get="{% url "setting_tabs" 'privacy' %}"
+                    hx-target="#tab-option-to-change"
+                    hx-swap="innerHTML"
+                    class="nav-link d-flex mb-0"  data-bs-toggle="tab"> <i class="bi bi-gear me-2">  </i> <span>Privacy and safety </span></a>
                   </li>
                   <li class="nav-item" data-bs-dismiss="offcanvas">
-                    <a class="nav-link d-flex mb-0" href="#nav-setting-tab-6" data-bs-toggle="tab"> <i class="bi bi-trash me-2">  </i> <span>Close account </span></a>
+                    <a
+                    hx-get="{% url "setting_tabs" 'suspend' %}"
+                    hx-target="#tab-option-to-change"
+                    hx-swap="innerHTML"
+                    class="nav-link d-flex mb-0"  data-bs-toggle="tab"> <i class="bi bi-trash me-2">  </i> <span>Close account </span></a>
                   </li>
                 </ul>
                 <!-- Side Nav END -->
@@ -70,7 +87,7 @@
         <!-- Main content START -->
         <div class="col-lg-6 vstack gap-4">
           <!-- Setting Tab content START -->
-          <div class="tab-content py-0 mb-0">
+          <div class="tab-content py-0 mb-0" id="tab-option-to-change">
 
           </div>          
         </div>

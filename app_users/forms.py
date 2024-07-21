@@ -82,7 +82,9 @@ class ProfileForm(forms.ModelForm):
             
             )
         self.fields["birthday"].widget.attrs.update(
-            {'class': 'form-control mb-2 flatpickr flatpickr-input', 
+            {
+                # 'class': 'form-control mb-2 flatpickr flatpickr-input', 
+                'class': 'form-control', 
                 
             }
             
@@ -95,6 +97,25 @@ class ProfileForm(forms.ModelForm):
             )
         self.fields["bio"].widget.attrs.update(
             {'class': 'form-control mb-2 pb-4',
+             
+            #  'style':"height:150px;"
+            }
+            
+            )
+        self.fields["address"].widget.attrs.update(
+            {'class': 'form-control mb-2',
+             
+            #  'style':"height:150px;"
+            }            
+            )
+        self.fields["cover_photo"].widget.attrs.update(
+            {'class': 'form-control mb-2',
+             
+            }            
+            )
+        
+        self.fields["profession"].widget.attrs.update(
+            {'class': 'form-control mb-2',
              
             #  'style':"height:150px;"
             }

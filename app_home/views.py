@@ -287,15 +287,24 @@ def search(request):
     results = []
     frnd_reqs = FriendRequests.objects.filter(sender=profile, accepted=False)
     got_reqs = FriendRequests.objects.filter(author=profile, accepted=False)
-    all_requested_people = [ x.sender for x in frnd_reqs ]+[ x.author for x in got_reqs]
     
     if q:
         # HERE HAVE TO IMPROVE TO FIND THE USER WITH MULTIPLE - username, f_name, L-name >>
-        results = Profile.objects.filter(first_name__icontains=q)
+        # results = Profile.objects.filter(profile__user__username__icontains=q)
+        results = Profile.objects.filter(user__username__icontains=q)
+        try:
+            print(results)
+            print(frnd_reqs)
+
+        except Exception as e:
+            print(dir(results))
+            print(e)
+
     context={
         "search_results":results,
         "s_query":q,
-        "friend_req_or_sended":all_requested_people,
+        "frnd_reqs":[ x.author for x in frnd_reqs],
+        "got_reqs": [ x.sender for x in got_reqs],
     }
 
     return render(request, "home/main/search.html", context)
@@ -342,10 +351,10 @@ def feed_comment(request, post_uid):
     return HttpResponse("Don't lost in the --- MORICHIKA ---", status=400)
 
 
-# ---- WORKING - FROM - 19/07/2024 -----(RUNNING)
+# ---- WORKING - FROM - 19/07/2024 -----(DONE)
 # NOTE: Nothing
-# CAN IMPROVE: 5
-# ERROR/Bug: 1
+# CAN IMPROVE: 2
+# ERROR/Bug: 0
 from .models import PostImage
 
 @login_requirements()
@@ -372,6 +381,31 @@ def view_profile(request, name):
 
 
 
+
+# ---- WORKING - FROM - 21/07/2024 -----(RUNNING)
+# NOTE: Nothing
+# CAN IMPROVE: 3 [i) after delete redirect where it was 
+#                ii) Only the post owner will see the delete option in HTML
+#               iii) 
+# ]
+# ERROR/Bug: 0
+
+@login_requirements()
+def delete_post(r, p_id):
+    '''
+    This function taked post uid and check if the user is actually the
+    Post's owner or not, then it delete the post.
+    '''
+    post = get_object_or_404(Posts, uid=p_id.strip())
+    if post.author == r.user.profile:
+        try:
+            post.delete()
+            messages.warning(r, "Your post has been deleted permanently!")
+        except:
+            messages.error(r, "Something fishy happened! Post could not be deleted!")
+    else:
+        messages.warning(r, "Whatever you do! You can't delete someone's post!")
+    return redirect("homepage")
 
 # =============== TEMPRORARY TESTING ROUTE ====================
 

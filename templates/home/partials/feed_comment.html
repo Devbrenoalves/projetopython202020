@@ -2,7 +2,7 @@
     <p>{{data.content}}</p>
     <div class="d-flex justify-content-between">
         <div class="row g-3">
-            {% for image in data.images.all|slice:":2" %}
+            {% for image in data.images.all|slice:":1" %}
             <div class="col-6">
                 <a class="h-100" href="{{image.image.url}}" data-glightbox="" data-gallery="image-popup">
                     <img class="rounded img-fluid" src="{{image.image.url}}" alt="Image">
@@ -10,12 +10,12 @@
             </div>
             {% endfor %}
             <div class="col-6">
-                {% for image in data.images.all|slice:"2:3" %}
+                {% for image in data.images.all|slice:"1:2" %}
                 <a href="{{image.image.url}}" data-glightbox="" data-gallery="image-popup">
                     <img class="rounded img-fluid" src="{{image.image.url}}" alt="Image">
                 </a>
                 {% endfor %}
-                {% for image in data.images.all|slice:"3:4" %}
+                {% for image in data.images.all|slice:"2:3" %}
                 <div class="position-relative bg-dark mt-3 rounded">
                     <div class="hover-actions-item position-absolute top-50 start-50 translate-middle z-index-9">
                         <a class="btn btn-link text-white" href="#"> View all </a>
@@ -49,7 +49,7 @@
         </li>
         <li class="nav-item dropdown">
             <a href="#" class="nav-link mb-0" id="cardShareAction4" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-reply-fill flip-horizontal ps-1"></i>Share (3)
+                <i class="bi bi-reply-fill flip-horizontal ps-1"></i>Share
             </a>
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="cardShareAction4">
                 <li><a class="dropdown-item" href="#"> <i class="bi bi-envelope fa-fw pe-2"></i>Send via Direct Message</a></li>

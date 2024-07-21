@@ -6,6 +6,8 @@
     <div class="card-body">
 
         {% for ppl in search_results %}
+        {% if ppl == user.profile %}
+        {% else %}
         <div class="card pt-2 pb-0 ">
             <div class="hstack gap-2 mb-3 ms-2">
                 <!-- Avatar -->
@@ -14,26 +16,33 @@
                 </div>
                 <!-- Title -->
                 <div class="overflow-hidden">
-                    <a class="h6 mb-0" href="#!">{{ppl.first_name}}</a>
+                    <a class="h6 mb-0" href="{% url "view_profile" ppl.user.username %}">{{ppl.first_name}}</a>
                     <p class="mb-0 small text-truncate">{{ppl.user.username}}</p>
                     <p class="mb-0 small text-truncate">{{ppl.user.profile.bio|truncatechars:"150"}}</p>
                 </div>
                 <!-- Button -->
                 <a class="btn btn-info-soft rounded-circle icon-md ms-auto" href="#"><i class="fa-solid fa-plus"> </i></a>
                 <div>
-                    {% if ppl not in friend_req_or_sended %}
+                    {% if ppl not in frnd_reqs and ppl not in got_reqs %}
                     <form action="{% url "send_friend_request" %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="the_person" value="{{ppl.user.username}}">
                         <button type="submit" class="btn btn-primary-soft rounded-circle icon-md ms-auto" ><i class="bi bi-person"></i></button>                    
                     </form>
+                    {% elif ppl in got_reqs %}
+                    <button type="button" class="btn btn-primary-soft rounded-circle icon-md ms-auto" ><i class="bi bi-check"></i></button>                    
+                    <button type="button" class="btn btn-danger-soft rounded-circle icon-md ms-auto" ><i class="bi bi-x"></i></button>                    
+                    
+                    {% elif ppl in frnd_reqs %}                                      
+                    <button type="button" class="btn btn-primary-soft rounded-circle icon-md ms-auto" ><i class="bi bi-x"></i></button>                    
+                    
                     {% else %}
-                    <button type="button" class="btn btn-primary-soft rounded-circle icon-md ms-auto" ><i class="bi bi-pen"></i></button>                    
                     
                     {% endif %}
                 </div>
             </div>
         </div>
+        {% endif %}
 
         {% endfor %}
         <!-- View more button -->

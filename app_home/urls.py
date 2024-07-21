@@ -9,6 +9,7 @@ urlpatterns = [
     path('post/<str:p_id>/', views.view_one_post, name="view_one_post"),
     path('search/', views.search, name='search'),
     path('profile/<str:name>/', views.view_profile, name='view_profile'),
+    path('delete-post/<str:p_id>/', views.delete_post, name='delete_post'),
     
     # Below are for only partial htmx request results.
     path('make_a_post/', views.make_a_post, name="make_a_post"),

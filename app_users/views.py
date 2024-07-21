@@ -36,7 +36,10 @@ def registration_step2(request):
             the_form.fill_up = True
             the_form.registered = True
             the_form.save()
+            messages.success(request,"Congrats! Your account is complete.")
             return redirect("homepage")
+        else:
+            messages.error(request, form.errors)
     else:
         form = ProfileForm(instance=profile)
     context = {
@@ -63,7 +66,7 @@ def login_page(request):
             # NOTE: Here we can update as - if some user was in another page but loggedout and 
             #       Want to login and see that page where he was needed to be logged in, 
             #       not redirect to homepage
-            return HttpResponseRedirect(request.path_info)
+            return redirect("homepage")
         
         except Exception as e:
             messages.error(request,f"ERROR: {e}")
