@@ -149,9 +149,8 @@ def view_one_post(request, p_id):
 
     except Exception as e:
         messages.error(request, f" {e}!")
-    
-    return render(request, "home/main/view_single_post.html", context)
 
+    return render(request, "home/main/view_single_post.html", context)
 
 @login_requirements()
 def view_replies(request, cmnt_uid):
@@ -164,7 +163,6 @@ def view_replies(request, cmnt_uid):
         return render(request, "home/partials/reply.html", context)
     
     return HttpResponse("Noting to show with this url",status=400)
-
 
 @login_requirements()
 def create_comments(request, post_uid):
@@ -192,7 +190,6 @@ def create_comments(request, post_uid):
         return render(request, "home/partials/comments.html", context)
     
     return HttpResponse("Nothing to show with this url", status=400)
-
 
 @login_requirements()
 def create_reply(request, cmnt_uid):
@@ -231,10 +228,8 @@ def add_reply(request):
     
     return HttpResponse("Nothing to show with this url", status=400)
 
-
 @login_requirements()
 def make_a_post(request):
-
     if request.htmx:
         if request.method=="POST":
             form=CreatePostForm(request.POST, request.FILES)
@@ -248,7 +243,7 @@ def make_a_post(request):
                     messages.error(request, f" {e} !")
         else:
             form=CreatePostForm()
-        context={"form":form}
+        context={"form":form, "i":0}
         
         return render(request, "home/partials/post_form.html", context)
     else:
@@ -269,7 +264,6 @@ def like_post(request, post_id):
         return render(request, "home/partials/liked.html", context)
     else:
         return HttpResponse("Go Back some server misleading!")
-
 
 # ---- WORKING - FROM - 18/07/2024 ----- (DONE)
 # NOTE: The search functionality can be improved after develop Pages and Groups feature.
@@ -354,13 +348,16 @@ def feed_comment(request, post_uid):
 # ---- WORKING - FROM - 19/07/2024 -----(DONE)
 # NOTE: Nothing
 # CAN IMPROVE: 2
-# ERROR/Bug: 0
-from .models import PostImage
+# ERROR/Bug: 1 [i) When upload post with Image the image not saving in object]
 
+from .models import PostImage
+from .forms import PostImageForm
 @login_requirements()
 def view_profile(request, name):
     '''
-    The function for view user profile and detail.
+    The function for view user profile and detail. User can make post
+    and see friends and edit profile as well. And public view will also 
+    show from here.
     '''
     username = name.strip()
     its_user_himself = False
@@ -370,16 +367,69 @@ def view_profile(request, name):
     if username == request.user.username:
         its_user_himself = True
 
+    form=CreatePostForm()
+    
+    if request.method=="POST":        
+        form=CreatePostForm(request.POST)
+        last_img_no = request.POST.get('last_image')
+        if form.is_valid():
+            try:
+                the_form = form.save(commit=False)
+                the_form.author = request.user.profile
+                form.save()
+                messages.success(request, "Post content saved!")
+            except Exception as e:
+                messages.error(request, f"ERROR: {e}")                
+            
+            if last_img_no:
+                try:
+                    for x in range(int(last_img_no)):
+                        the_image = request.POST.get(f'image_{x+1}')
+                        print(the_image)
+                        if the_image:
+                            # form2 = PostImageForm()                            
+                            # image_form = form2.save(commit=False)
+                            
+                            # image_form.post = the_form
+                            # image_form.image = the_image
+                            # image_form.save()
+                            post_image_object = PostImage.objects.create(
+                                post=the_form,
+
+                            )
+                            post_image_object.image = "post_images/"+the_image
+                            post_image_object.save()
+                    messages.success(request,"Images uploaded successfully!")
+
+                except Exception as e:
+                    messages.warning(request, f"Something went wrong, So Images did not uploaded = {e}")
+        else:
+            if last_img_no:
+                messages.error(request, "Sorry submit your images with post's content!")
+        return redirect(request.path)
     context={
         "profile":profile,
         "its_user_himself":its_user_himself,
         "posts":all_post,
         "all_photo":all_photo,
+        "i":0,
+        "form":form,                
     }
-    
+
     return render(request, "home/main/view_profile.html", context)
 
 
+@login_requirements()
+def add_post_images(request, itr):
+    '''
+    HTMX response for show the image upload option to the user.
+    Multiple click shows up option of more image add
+    '''
+    if request.htmx:
+        i = int(itr)+1
+        context={"i":i}
+        return render(request, "home/partials/add_photo.html",context)
+    return HttpResponse("You are lost in BLACK HOLE!", status=404)
 
 
 # ---- WORKING - FROM - 21/07/2024 -----(RUNNING)
@@ -409,14 +459,27 @@ def delete_post(r, p_id):
 
 # =============== TEMPRORARY TESTING ROUTE ====================
 
+import uuid
+
 def temp(request):
-    post = get_object_or_404(Posts, uid="e66631fe-150d-4db0-8b87-8303be5ba922")
+    i = 0
     context = {
-        "data": post
+        "i":i,
     }
     return render(request, "temp.html", context)
 
-def temp_partial(request):
+def temp_partial(request, itr):
     if request.htmx:
-        return render(request, "temp_p.html")
+        if request.method=="POST":
+            form = PostImageForm(request.POST)
+        else:
+            form = PostImageForm()
+
+        i =int(itr)+1
+        context={
+            "i": i,
+            "form": form,
+                }
+        return render(request, "temp_p.html", context)
+    
     return redirect("homepage")

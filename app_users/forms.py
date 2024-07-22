@@ -86,6 +86,7 @@ class ProfileForm(forms.ModelForm):
                 # 'class': 'form-control mb-2 flatpickr flatpickr-input', 
                 'class': 'form-control', 
                 
+                
             }
             
             )

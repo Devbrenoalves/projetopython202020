@@ -1,47 +1,50 @@
 <div class="">
-	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-		<div class="modal-content">
-			
-			<!-- Modal feed body START -->
-			<form class="w-100" method="POST" novalidate>
-				{% csrf_token %}
-				<div class="modal-body">
-					<!-- Add Feed -->
-					<div class="d-flex mb-3">
-						
-						<!-- Feed box  -->
-						{{form.content}}
-					</div>
-					<!-- Feed rect START -->
-					<div class="hstack gap-2">
-						<a class="icon-md bg-success bg-opacity-10 text-success rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Photo"> <i class="bi bi-image-fill"></i> </a>
-						<a class="icon-md bg-info bg-opacity-10 text-info rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Video"> <i class="bi bi-camera-reels-fill"></i> </a>
-						<a class="icon-md bg-danger bg-opacity-10 text-danger rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Events"> <i class="bi bi-calendar2-event-fill"></i> </a>
-						<a class="icon-md bg-warning bg-opacity-10 text-warning rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Feeling/Activity"> <i class="bi bi-emoji-smile-fill"></i> </a>
-						<a class="icon-md bg-light text-secondary rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Check in"> <i class="bi bi-geo-alt-fill"></i> </a>
-						<a class="icon-md bg-primary bg-opacity-10 text-primary rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Tag people on top"> <i class="bi bi-tag-fill"></i> </a>
-					</div>
-					<p class="text-danger mt-1">Image upload is disabled due to storage insufficiency</p>
-					<!-- Feed rect END -->
-				</div>
-				<!-- Modal feed footer -->
-				<div class="modal-footer row justify-content-between">
-					<!-- Select -->
-					<div class="col-lg-3 block">						
-						{{form.privacy}}
-					<!-- Button -->
-					</div>
-					<div class="col-lg-8 text-sm-end">
-						<button type="button" class="btn btn-danger-soft me-2"> <i class="bi bi-camera-video-fill pe-1"></i> Live video</button>
-						<button type="submit" class="btn btn-success-soft">Post</button>
-					</div>
-				</div>
-				<!-- Modal feed footer -->
-				<!-- Modal feed body END -->
-			</form>
-
-
+	<div class="d-flex mb-1">
+		<div class="avatar avatar-xs me-2">
+			<a href="#"> <img class="avatar-img rounded-circle" src="{{user.profile.profile_picture.url}}" alt="pic"> </a>
 		</div>
+		<!-- Modal feed body START -->
+		<form class="w-100" method="POST" novalidate>
+			{% csrf_token %}
+			<div class="modal-body">
+				<!-- Add Feed -->
+				<div class="d-flex mb-3">
+					
+					<!-- Feed box  -->
+					{{form.content}}
+				</div>
+				<div id="photo-xyxy">
+
+				</div>
+				<div class="hstack gap-2">
+					<a
+					class="icon-md bg-success bg-opacity-10 text-success rounded-circle"
+					href="#"
+					hx-get="{% url "add_post_images" i %}"
+					hx-target="#photo-xyxy"
+					hx-swap="innerHTML"
+					title="Photo">
+					<i class="bi bi-image-fill"></i>
+					</a>
+					<a class="icon-md bg-info bg-opacity-10 text-info rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Video"> <i class="bi bi-camera-reels-fill"></i> </a>
+					<a class="icon-md bg-danger bg-opacity-10 text-danger rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Events"> <i class="bi bi-calendar2-event-fill"></i> </a>
+					<a class="icon-md bg-warning bg-opacity-10 text-warning rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Feeling/Activity"> <i class="bi bi-emoji-smile-fill"></i> </a>
+					<a class="icon-md bg-light text-secondary rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Check in"> <i class="bi bi-geo-alt-fill"></i> </a>
+					<a class="icon-md bg-primary bg-opacity-10 text-primary rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Tag people on top"> <i class="bi bi-tag-fill"></i> </a>
+				</div>
+				<p class="text-danger mt-1">Image upload is disabled due to storage insufficiency</p>					
+			</div>
+			<div class="modal-footer row justify-content-between">
+				<!-- Select -->
+				<div class="col-lg-3 block">						
+					{{form.privacy}}
+				<!-- Button -->
+				</div>
+				<div class="col-lg-8 text-sm-end">
+					<button type="button" class="btn btn-danger-soft me-2"> <i class="bi bi-camera-video-fill pe-1"></i> Live video</button>
+					<button type="submit" class="btn btn-success-soft">Post</button>
+				</div>
+			</div>
+		</form>
 	</div>
 </div>
-

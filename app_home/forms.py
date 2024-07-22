@@ -1,8 +1,4 @@
-from typing import Any, Dict, Mapping, Optional, Type, Union
 from django import forms
-from django.core.files.base import File
-from django.db.models.base import Model
-from django.forms.utils import ErrorList
 from .models import PostImage, Posts, FriendRequests, Friends
 
 class CreatePostForm(forms.ModelForm):
@@ -27,9 +23,6 @@ class CreatePostForm(forms.ModelForm):
             }
         )
 
-
-
-
 from .models import Comment
 
 class FriendsForm(forms.ModelForm):
@@ -42,3 +35,9 @@ class FriendRequestsForm(forms.ModelForm):
         model = FriendRequests
         fields = '__all__'
 
+class PostImageForm(forms.ModelForm):
+    
+    class Meta:
+        model = PostImage
+        fields = "__all__"
+        exclude=['post']

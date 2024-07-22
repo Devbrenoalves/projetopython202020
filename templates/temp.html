@@ -1,4 +1,5 @@
 {% load static %}
+{% load ipost %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,16 +11,18 @@
 </head>
 <body>
     <h2>TESTING HTML CODE HERE </h2>
+    
+    <div id="xxyy">
 
-    <button hx-get="{% url "temp_partial" %}" 
-    hx-target="#random" 
-    hx-swap="innerHTML" 
-    >CLICK </button>
-
-    <div id="random">
-        Random text to swap
     </div>
 
-
+    <br>
+    <button
+    hx-get="{% url "temp_partial" i %}" 
+    hx-target="#xxyy" 
+    hx-swap="innerHTML"
+    >ADD IMAGE 
+    </button>
+        
 </body>
 </html>

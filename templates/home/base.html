@@ -69,7 +69,7 @@
       
     </script>
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{% static "images/favicon.ico" %}">
+    <link rel="shortcut icon" href="{% static "images/cxx.png" %}">
     <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap">
@@ -103,13 +103,14 @@
       Header START -->
     <header class="navbar-light fixed-top header-static bg-mode">
       {% include "auth/toaster.html" %}
+      {% block toaster %}{% endblock toaster %}
       <!-- Logo Nav START -->
       <nav class="navbar navbar-expand-lg">
         <div class="container">
           <!-- Logo START -->
           <a class="navbar-brand" href="{% url "homepage" %}">
-          <img class="light-mode-item navbar-brand-item" src="{% static "images/cx.png" %}" alt="logo">
-          <img class="dark-mode-item navbar-brand-item" src="{% static "images/cx.png" %}" alt="logo">
+          <img class="light-mode-item navbar-brand-item" src="{% static "images/cxlogo.png" %}" alt="logo">
+          <img class="dark-mode-item navbar-brand-item" src="{% static "images/cxlogo.png" %}" alt="logo">
           </a>
           <!-- Logo END -->
           <!-- Responsive navbar toggler -->
