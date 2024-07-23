@@ -31,7 +31,7 @@ class Posts(CommonBaseModel):
 
     
     def __str__(self):
-        return f"Post by {self.author} at {self.created_at}"
+        return f"{self.author}'s Post at {self.created_at}"
 
 class PostImage(CommonBaseModel):
     post = models.ForeignKey(Posts, related_name='images', on_delete=models.CASCADE)

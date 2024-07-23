@@ -34,22 +34,9 @@ def mefollow(user):
         print(e)
         return 0
 
+
+@register.filter(name='likers')
+def likers(the_post):
+    the_reactors = the_post.likes.all()
     
-
-@register.filter(name='add_class')
-def add_class(value, arg):
-    css_classes = value.field.widget.attrs.get('class', '')    
-    if css_classes:
-        css_classes += ' ' + arg
-    else:
-        css_classes = arg
-
-    css_name = value.field.widget.attrs.get('name', '')    
-    if css_name:
-        css_name += ' ' + "image---11"
-    else:
-        css_name = "image---11"
-        
-    value.field.widget.attrs['class'] = css_classes
-    value.field.widget.attrs['name'] = css_name
-    return value
+    return [x.user for x in the_reactors]

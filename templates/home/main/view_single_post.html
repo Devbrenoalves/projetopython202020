@@ -1,5 +1,6 @@
 {% extends "home/base.html" %}
 {% load static %}
+{% load ipost %}
 {% block title %}Post{% endblock title %}
 {% block css %}
 
@@ -38,7 +39,7 @@
                 </div>
             </div>
         </div>
-        <div class="card-body">
+        <div class="card-body" id="target-{{data.uid}}">
             <p>{{data.content}}</p>
             <div class="d-flex justify-content-between">
                 <div class="row g-3">
@@ -68,8 +69,22 @@
                 </li>
             </ul>
             <ul class="nav nav-pills nav-pills-light nav-fill nav-stack small border-top border-bottom py-1 mb-3">
-                <li class="nav-item">
-                    <a class="nav-link mb-0 {% if user.profile in data.liker_person %}active{% endif %}" href="{% url 'like_post' data.uid %}" class="like-post"> <i class="bi bi-heart pe-1"></i>Liked ({{data.likes.count}})</a>
+                <li class="nav-item">            
+                    <a            
+                    class="nav-link mb-0 {% if user.profile in data|likers %}active{% endif %}"
+                    hx-get="{% url 'like_post' data.uid %}"
+                    hx-swap="outerHTML"
+                    hx-target="#target-{{data.uid}}"
+                    >
+                    
+                    {% if user.profile in data|likers %}
+                    <i class="bi bi-heart-fill pe-1"></i>
+                    Liked ({{data.likes.count}})
+                    {% else %}
+                    <i class="bi bi-heart pe-1"></i>
+                    Like ({{data.likes.count}})
+                    {% endif %}
+                    </a>            
                 </li>
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link mb-0" id="cardShareAction4" data-bs-toggle="dropdown" aria-expanded="false">
