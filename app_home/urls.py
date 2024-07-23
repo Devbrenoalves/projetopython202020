@@ -7,7 +7,7 @@ urlpatterns = [
     path('send-request/', views.send_friend_request, name="send_friend_request"),
     path('accept/<str:usr>/', views.accept_request, name="accept_req"),
     path('post/<str:p_id>/', views.view_one_post, name="view_one_post"),
-    path('search/', views.search, name='search'),
+    path('search/', views.search, name='search'),    
     path('profile/<str:name>/', views.view_profile, name='view_profile'),
     path('delete-post/<str:p_id>/', views.delete_post, name='delete_post'),
     

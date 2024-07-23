@@ -3,7 +3,7 @@ from .forms import CreatePostForm
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 
-from app_users.models import Profile
+from app_users.models import Profile, User
 from .models import Posts, Like, Comment, FriendRequests, Friends
 from .forms import FriendRequestsForm,FriendsForm
 
@@ -15,7 +15,7 @@ def homepage(request):
 
     all_post = Posts.objects.all()
     # we can add logic here to recomend the friend suggestion
-    people = Profile.objects.all()
+    people = Profile.objects.filter(fill_up=True,registered=True)
 
     # Filtering the friend request sended list to show in template
     my_requests = FriendRequests.objects.filter(sender = profile)
@@ -50,51 +50,45 @@ def homepage(request):
     }
     return render(request, "home/main/index.html", context)
 
+# ii) When accepting or rejecting request we can send notifications
 @login_requirements()
 def accept_request(request, usr):
-    profile = request.user.profile
+    '''
+    usr -> is he/ she who sender request or him/her username.
+    By getting both sender and receiver profile friend list is getting updated.
+    '''
+    myself = request.user.profile
     try:
-        person = get_object_or_404(Profile, user__username=usr.strip())
+        themself = get_object_or_404(Profile, user__username=usr.strip())
+        # ---- LOGGED IN USER'S (My) FRIEND ADDING ----->>
+        my_existing_object = Friends.objects.get_or_create(author=myself)[0]    
+        my_existing_object.friend.add(themself)
 
-        # ---- LOGGED IN USER'S FRIEND ADDING ----->>
-        existing_object = Friends.objects.filter(author=profile).first()
-        if not existing_object:
-            friend_list = Friends.objects.create(author=profile)
-            friend_list.friend.add(person)
-            friend_list.save()
-            FriendRequests.objects.filter(sender=person, author=profile).delete()
-            
-            messages.success(request, f" {person}'s friend request accepted!")
-
-        else:
-            existing_object.friend.add(person)
-            messages.success(request, f"{person} added as friend!")
-            FriendRequests.objects.filter(sender=person, author=profile).delete()
-
-        # ---- ALSO ADDING FRIEND FOR THAT PERSON WHO REQUESTED ---->>>
-        persons_existing_object = Friends.objects.filter(author=person).first()
-        if not persons_existing_object:
-            his_friend_list = Friends.objects.create(author=person)
-            his_friend_list.friend.add(profile)
-            his_friend_list.save()
-
-            FriendRequests.objects.filter(author=person, person=profile).delete()
-            # print("------------ HIS CREATED AND ACCEPTED ----------")
-
-        else:
-            persons_existing_object.friend.add(profile)
-            FriendRequests.objects.filter(author=person, person=profile).delete()
-            # print("===== HIS ALREADY EXISTS SO ADDED FRIEND =====")
-
+        # # ---- ALSO ADDING FRIEND FOR THAT PERSON WHO REQUESTED ---->>>
+        them_existing_object = Friends.objects.get_or_create(author=themself)[0]
+        them_existing_object.friend.add(myself)
+        messages.success(request, f"{themself} added as friend!")
     except Exception as e:
         messages.error(request, f" {e} !")
+        print("accept req function's first try catch ===>>> ", e)
+        
+    try:
+        FriendRequests.objects.filter(author=myself, sender=themself)[0].delete()
+        FriendRequests.objects.filter(sender=themself, author=myself)[0].delete()
+    except Exception as e:
+        print("accept req function's 2nd try catch ===>>> ", e)
 
-    return redirect("homepage")
+    # return redirect(request.path)
+    # return HttpResponseRedirect(request.path_info)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
-
+# i) In case of sending friend request we can check
+#    Is the profile is fill_up and registered ?
+# ii) When sending request we can send notification
 @login_requirements()
 def send_friend_request(request):
     if request.method == "POST":
+        # print("===>>> ",request.POST.get("the_person"))
         try:
             person = request.POST.get("the_person")
             author_whom_sending_request = get_object_or_404(Profile, user__username=person.strip())
@@ -123,22 +117,6 @@ def send_friend_request(request):
             messages.warning(request, f"{e}")
     
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-
-# @login_requirements()
-# def create_post(request):
-
-#     if request.method == "POST":
-#         form = CreatePostForm(request.POST)
-#     else:
-#         form = CreatePostForm()
-#     context = {
-#         "form":form,
-#     }
-#     # if request.htmx:
-#     #     return render(request, "home/partials/create_post.html", context)
-#     # return render(request, "home/create_post.html", context)
-#     return render(request, "home/partials/create_post.html", context)
-
 
 @login_requirements()
 def view_one_post(request, p_id):
@@ -285,7 +263,7 @@ def search(request):
     if q:
         # HERE HAVE TO IMPROVE TO FIND THE USER WITH MULTIPLE - username, f_name, L-name >>
         # results = Profile.objects.filter(profile__user__username__icontains=q)
-        results = Profile.objects.filter(user__username__icontains=q)
+        results = Profile.objects.filter(user__username__icontains=q,fill_up=True,registered=True)
         try:
             print(results)
             print(frnd_reqs)
@@ -345,9 +323,11 @@ def feed_comment(request, post_uid):
     return HttpResponse("Don't lost in the --- MORICHIKA ---", status=400)
 
 
-# ---- WORKING - FROM - 19/07/2024 -----(DONE)
+# ---- WORKING - FROM - 19/07/2024 - 21/07/20204 -----(DONE)
 # NOTE: Nothing
-# CAN IMPROVE: 2
+# CAN IMPROVE: 2 [i) Only the public privacy posts and images will show insted of all()
+#                ii)  
+#                ]
 # ERROR/Bug: 1 [i) When upload post with Image the image not saving in object]
 
 from .models import PostImage
@@ -361,21 +341,28 @@ def view_profile(request, name):
     '''
     username = name.strip()
     its_user_himself = False
+    
     profile = get_object_or_404(Profile, user__username = username)
+    he=profile
+    me=request.user
+
     all_post = Posts.objects.filter(author=profile)
-    all_photo = PostImage.objects.filter(post__author = profile)
-    if username == request.user.username:
+    all_photo = PostImage.objects.filter(post__author = profile).order_by("-created_at")[:10]
+    if username == me.username:
         its_user_himself = True
+    
 
     form=CreatePostForm()
     
-    if request.method=="POST":        
+    # From here its logic to make a post with image upload
+    # Though here has a problem with image upload> Need to fix SOON**
+    if request.method=="POST":     
         form=CreatePostForm(request.POST)
         last_img_no = request.POST.get('last_image')
         if form.is_valid():
             try:
                 the_form = form.save(commit=False)
-                the_form.author = request.user.profile
+                the_form.author = me.username
                 form.save()
                 messages.success(request, "Post content saved!")
             except Exception as e:
@@ -407,23 +394,39 @@ def view_profile(request, name):
             if last_img_no:
                 messages.error(request, "Sorry submit your images with post's content!")
         return redirect(request.path)
+    # =====================================
+    his_friend_req_list=FriendRequests.objects.filter(
+        sender= me.profile,
+        author=he,
+        accepted=False,
+    )
+    my_friend_req_list=FriendRequests.objects.filter(
+        author=me.profile,
+        sender= he,
+        accepted=False,
+    )
+    myfriends = Friends.objects.get_or_create(author=me.profile)[0]
     context={
-        "profile":profile,
+        "the_profile":profile,
         "its_user_himself":its_user_himself,
         "posts":all_post,
         "all_photo":all_photo,
         "i":0,
-        "form":form,                
+        "form":form,
+        "his_friend_req_list":[ x.sender for x in his_friend_req_list],
+        "my_friend_req_list":[ x.sender for x in my_friend_req_list],
+        "myfriends":myfriends,
     }
 
     return render(request, "home/main/view_profile.html", context)
 
-
+# 22/07/2024 -- (DONE)
 @login_requirements()
 def add_post_images(request, itr):
     '''
     HTMX response for show the image upload option to the user.
-    Multiple click shows up option of more image add
+    Multiple click shows up option of more image add.
+    Just for show partials code of image upload option.
     '''
     if request.htmx:
         i = int(itr)+1
@@ -432,14 +435,13 @@ def add_post_images(request, itr):
     return HttpResponse("You are lost in BLACK HOLE!", status=404)
 
 
-# ---- WORKING - FROM - 21/07/2024 -----(RUNNING)
+# ---- WORKING - FROM - 21/07/2024 -----(DONE)
 # NOTE: Nothing
 # CAN IMPROVE: 3 [i) after delete redirect where it was 
 #                ii) Only the post owner will see the delete option in HTML
 #               iii) 
 # ]
 # ERROR/Bug: 0
-
 @login_requirements()
 def delete_post(r, p_id):
     '''

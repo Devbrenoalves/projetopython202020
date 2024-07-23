@@ -122,4 +122,11 @@ class ProfileForm(forms.ModelForm):
             }
             
             )
+        self.fields["status"].widget.attrs.update(
+            {'class': 'form-control mb-2',
+             
+            #  'style':"height:150px;"
+            }
+            
+            )
         

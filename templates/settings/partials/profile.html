@@ -1,6 +1,3 @@
-{% block toaster %}
-{% include "auth/toaster.html" %}
-{% endblock toaster %}
 <!-- Account setting tab START -->
 <div class="tab-pane show active fade"  role="tabpanel">
 <!-- Account settings START -->
@@ -103,6 +100,12 @@
                    
             {{form.cover_photo.label}}
             {{form.cover_photo}}
+            
+        </div>
+        <div class="col-12">  
+                   
+            {{form.status.label}}
+            {{form.status}}
             
         </div>
         <div class="col-12">  

@@ -1,8 +1,6 @@
 <div class="">
 	<div class="d-flex mb-1">
-		<div class="avatar avatar-xs me-2">
-			<a href="#"> <img class="avatar-img rounded-circle" src="{{user.profile.profile_picture.url}}" alt="pic"> </a>
-		</div>
+		
 		<!-- Modal feed body START -->
 		<form class="w-100" method="POST" novalidate>
 			{% csrf_token %}
@@ -17,6 +15,19 @@
 
 				</div>
 				<div class="hstack gap-2">
+
+				<ul class="nav nav-pills nav-stack small fw-normal mt-1">
+					<li class="nav-item">
+						<a 
+						hx-get="{% url "add_post_images" i %}"
+						hx-target="#photo-xyxy"
+						hx-swap="innerHTML"
+						class="nav-link bg-light py-1 px-2 mb-0" 
+						href="#post" >
+						<i class="bi bi-image-fill text-success pe-2"></i>Photo</a>
+					</li>	
+
+					{% comment %} <li class="nav-item">
 					<a
 					class="icon-md bg-success bg-opacity-10 text-success rounded-circle"
 					href="#"
@@ -26,11 +37,18 @@
 					title="Photo">
 					<i class="bi bi-image-fill"></i>
 					</a>
-					<a class="icon-md bg-info bg-opacity-10 text-info rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Video"> <i class="bi bi-camera-reels-fill"></i> </a>
-					<a class="icon-md bg-danger bg-opacity-10 text-danger rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Events"> <i class="bi bi-calendar2-event-fill"></i> </a>
-					<a class="icon-md bg-warning bg-opacity-10 text-warning rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Feeling/Activity"> <i class="bi bi-emoji-smile-fill"></i> </a>
-					<a class="icon-md bg-light text-secondary rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Check in"> <i class="bi bi-geo-alt-fill"></i> </a>
-					<a class="icon-md bg-primary bg-opacity-10 text-primary rounded-circle" href="#" data-bs-toggle="tooltip" data-bs-placement="top" title="Tag people on top"> <i class="bi bi-tag-fill"></i> </a>
+					</li> {% endcomment %}
+					
+					<li class="nav-item">
+					<a class="nav-link bg-light py-1 px-2 mb-0" href="#" data-bs-toggle="modal" data-bs-target="#feedActionVideo"> <i class="bi bi-camera-reels-fill text-info pe-2"></i>Video</a>
+					</li>
+					<li class="nav-item">
+					<a href="#" class="nav-link bg-light py-1 px-2 mb-0" data-bs-toggle="modal" data-bs-target="#modalCreateEvents"> <i class="bi bi-calendar2-event-fill text-danger pe-2"></i>Event </a>
+					</li>
+					<li class="nav-item">
+					<a class="nav-link bg-light py-1 px-2 mb-0" href="#" data-bs-toggle="modal" data-bs-target="#modalCreateFeed"> <i class="bi bi-emoji-smile-fill text-warning pe-2"></i>Feeling /Activity</a>
+					</li>	
+				</ul>				
 				</div>
 				<p class="text-danger mt-1">Image upload is disabled due to storage insufficiency</p>					
 			</div>

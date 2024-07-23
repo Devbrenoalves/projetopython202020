@@ -59,6 +59,11 @@ GENDER = [
     ('male', 'Male'),
     ('female', 'Female'),
 ]
+RELATIONS=[
+    ('single','Single'),
+    ('married','Married'),
+    ('in_a_relation','In a relation'),
+]
 
 class Profile(CommonBaseModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -76,6 +81,7 @@ class Profile(CommonBaseModel):
     
     profession = models.CharField(max_length=50, null=True, blank=True)
     address = models.CharField(max_length=250, null=True, blank=True)
+    status=models.CharField(max_length=20, choices=RELATIONS, default="single")
 
     def save(self, *args, **kwargs):
         if not self.profile_picture:
