@@ -80,8 +80,8 @@ def friends(req, cx_user):
     if all_friends.privacy=='friends':
         if req.user.profile not in all_friends.friend.all():
             public_friends = None
-        else:
-            public_friends = None if all_friends.privacy=="only_me" else all_friends.friend.all()
+    else:
+        public_friends = None if all_friends.privacy=="only_me" else all_friends.friend.all()
     context={
         "friends":public_friends,
     }

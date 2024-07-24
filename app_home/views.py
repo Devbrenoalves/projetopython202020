@@ -1,12 +1,12 @@
 from .utilities import login_requirements
+from django.http import JsonResponse
 from .forms import CreatePostForm
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponseRedirect, HttpResponse
 from django.contrib import messages
 
 from app_users.models import Profile, User
-from .models import Posts, Like, Comment, FriendRequests, Friends
-from .forms import FriendRequestsForm,FriendsForm
-
+from .models import Posts, Like, Comment, FriendRequests, Friends, PostImage
+from .forms import FriendRequestsForm,FriendsForm, PostImageForm
 
 @login_requirements()
 def homepage(request):
@@ -33,6 +33,24 @@ def homepage(request):
             the_form = form.save(commit=False)
             the_form.author=profile
             the_form.save()
+            image_no = request.POST.get('last_image')
+            if image_no:
+                try:
+                    for x in range(int(image_no)):
+                        the_image = request.FILES.get(f'image_{x+1}')
+                        
+                        if the_image:                      
+                            post_image_object = PostImage.objects.create(
+                                post=the_form,
+
+                            )
+                            post_image_object.image = the_image
+                            post_image_object.save()
+                    messages.success(request,"Post with Images uploaded successfully!")
+
+                except Exception as e:
+                    messages.warning(request, f"Something went wrong, So Images did not uploaded, But post uploaded.")
+
             messages.success(request, "Post uploaded!")
             return redirect(request.path)
     else:
@@ -330,8 +348,6 @@ def feed_comment(request, post_uid):
 #                ]
 # ERROR/Bug: 1 [i) When upload post with Image the image not saving in object]
 
-from .models import PostImage
-from .forms import PostImageForm
 @login_requirements()
 def view_profile(request, name):
     '''
@@ -355,36 +371,28 @@ def view_profile(request, name):
     form=CreatePostForm()
     
     # From here its logic to make a post with image upload
-    # Though here has a problem with image upload> Need to fix SOON**
+    # FIXED and Now we will let user upload upto 1 image.
     if request.method=="POST":     
         form=CreatePostForm(request.POST)
         last_img_no = request.POST.get('last_image')
         if form.is_valid():
-            try:
-                the_form = form.save(commit=False)
-                the_form.author = me.username
-                form.save()
-                messages.success(request, "Post content saved!")
-            except Exception as e:
-                messages.error(request, f"ERROR: {e}")                
+        
+            the_form = form.save(commit=False)
+            the_form.author = me.profile
+            form.save()
+            messages.success(request, "Post content saved!")
             
             if last_img_no:
                 try:
                     for x in range(int(last_img_no)):
-                        the_image = request.POST.get(f'image_{x+1}')
-                        print(the_image)
-                        if the_image:
-                            # form2 = PostImageForm()                            
-                            # image_form = form2.save(commit=False)
-                            
-                            # image_form.post = the_form
-                            # image_form.image = the_image
-                            # image_form.save()
+                        the_image = request.FILES.get(f'image_{x+1}')
+                        
+                        if the_image:                      
                             post_image_object = PostImage.objects.create(
                                 post=the_form,
 
                             )
-                            post_image_object.image = "post_images/"+the_image
+                            post_image_object.image = the_image
                             post_image_object.save()
                     messages.success(request,"Images uploaded successfully!")
 
@@ -457,7 +465,10 @@ def delete_post(r, p_id):
             messages.error(r, "Something fishy happened! Post could not be deleted!")
     else:
         messages.warning(r, "Whatever you do! You can't delete someone's post!")
+
     return redirect("homepage")
+    # return redirect(r.META.get('HTTP_REFERER', '/'))
+    # return JsonResponse({'success': True})
 
 # =============== TEMPRORARY TESTING ROUTE ====================
 

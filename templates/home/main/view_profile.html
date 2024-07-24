@@ -104,7 +104,7 @@
                 <a href="#"> <img class="avatar-img rounded-circle" src="{{the_profile.profile_picture.url}}" alt=""> </a>
               </div>
               <!-- Post input -->
-              <form class="w-100" method="POST" novalidate>
+              <form class="w-100" method="POST" enctype="multipart/form-data" novalidate>
                 {% csrf_token %}
                 {% for row in form %}
                 <div class="mb-2">

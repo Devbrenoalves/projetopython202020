@@ -13,8 +13,11 @@ def registration(request):
         form = CommonRegistrationForm(request.POST)
         if form.is_valid():
             form.save()
+            user = form.instance
+            login(request, user)
             messages.success(request,"Register done!")
-            return redirect("login_page")
+            
+            return redirect("signup_details")
     else:
         form = CommonRegistrationForm()
     context = {
@@ -62,10 +65,12 @@ def login_page(request):
             user = authenticate(email=username_or_email, password=password)
             login(request, user)
             messages.success(request, "Log in success! Welcome.")
-            # return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-            # NOTE: Here we can update as - if some user was in another page but loggedout and 
-            #       Want to login and see that page where he was needed to be logged in, 
-            #       not redirect to homepage
+
+            #  -- IMPEMENTED Improvement --
+            next_page = request.GET.get('next')
+            if next_page:
+                return redirect(next_page)
+            
             return redirect("homepage")
         
         except Exception as e:
