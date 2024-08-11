@@ -26,7 +26,7 @@ This project is a FullStack Django based Social Network Website similar to Faceb
 
 Live Website: https://bloome.pythonanywhere.com/
 <br>
-CR mail: demo@gmail.com
+Mail: demo@gmail.com
 <br>
 Password: 111111qqqqqq
 
@@ -34,11 +34,11 @@ Password: 111111qqqqqq
 
 <div class="image-container">
 <p align='center'>
-<img alt="demo" width="600" src="https://github.com/user-attachments/assets/680567a2-9bf2-4f3b-93a3-3b68ff28293e">
-<img alt="demo" width="400" src="https://github.com/user-attachments/assets/e98c0639-400c-4f8b-ac9c-d63a18c712fb">
+<img alt="demo" width="400" src="https://github.com/user-attachments/assets/680567a2-9bf2-4f3b-93a3-3b68ff28293e">
+<img alt="demo" width="300" src="https://github.com/user-attachments/assets/e98c0639-400c-4f8b-ac9c-d63a18c712fb">
 <hr>
-<img alt="demo" width="500" src="https://github.com/user-attachments/assets/cf7435d6-3848-481e-b390-b1680fc608a3">
-<img alt="demo" width="500" src="https://github.com/user-attachments/assets/3f79e369-b11e-40ac-bbd9-6820a803eff7">
+<img alt="demo" width="400" src="https://github.com/user-attachments/assets/cf7435d6-3848-481e-b390-b1680fc608a3">
+<img alt="demo" width="400" src="https://github.com/user-attachments/assets/3f79e369-b11e-40ac-bbd9-6820a803eff7">
 
 </p>
 </div>
