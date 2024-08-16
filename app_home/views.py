@@ -466,8 +466,8 @@ def delete_post(r, p_id):
     else:
         messages.warning(r, "Whatever you do! You can't delete someone's post!")
 
-    return redirect("homepage")
-    # return redirect(r.META.get('HTTP_REFERER', '/'))
+    # return redirect("homepage")
+    return redirect(r.META.get('HTTP_REFERER', '/'))
     # return JsonResponse({'success': True})
 
 # =============== TEMPRORARY TESTING ROUTE ====================

@@ -3,11 +3,11 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
   <head>
-    <title>ChatXity | {% block title %}{% endblock title %}</title>
+    <title>Bloome | {% block title %}{% endblock title %}</title>
     <!-- Meta Tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="ChatXity.com">
+    <meta name="author" content="Bloome.com">
     <meta name="description" content="Bootstrap 5 based Social Media Network and Community Theme">
     <!-- Dark mode -->
     <script>
@@ -69,7 +69,7 @@
       
     </script>
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{% static "images/cxx.png" %}">
+    <link rel="shortcut icon" href="{% static "images/blome.png" %}">
     <!-- Google Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap">
@@ -103,14 +103,14 @@
       Header START -->
     <header class="navbar-light fixed-top header-static bg-mode">
       {% include "auth/toaster.html" %}
-      {% block toaster %}{% endblock toaster %}
+      
       <!-- Logo Nav START -->
       <nav class="navbar navbar-expand-lg">
         <div class="container">
           <!-- Logo START -->
           <a class="navbar-brand" href="{% url "homepage" %}">
-          <img class="light-mode-item navbar-brand-item" src="{% static "images/cxlogo.png" %}" alt="logo">
-          <img class="dark-mode-item navbar-brand-item" src="{% static "images/cxlogo.png" %}" alt="logo">
+          <img class="light-mode-item navbar-brand-item" src="{% static "images/bloome.png" %}" alt="logo">
+          <img class="dark-mode-item navbar-brand-item" src="{% static "images/bloome.png" %}" alt="logo">
           </a>
           <!-- Logo END -->
           <!-- Responsive navbar toggler -->
@@ -144,7 +144,7 @@
           <ul class="nav flex-nowrap align-items-center ms-sm-3 list-unstyled">
             <li class="nav-item ms-2">
               <a class="nav-link bg-light icon-md btn btn-light p-0" href="{% url "inbox" %}">
-              <i class="bi bi-chat-left-text-fill fs-6"> </i>
+              <i class="bi bi-envelope-fill fs-6"> </i>
               </a>
             </li>
             <li class="nav-item ms-2">

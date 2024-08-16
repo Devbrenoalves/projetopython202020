@@ -29,17 +29,21 @@ LOGIN_URL = "/auth/login/"
 SECRET_KEY = 'django-insecure-&8$jipu$mg1ap2l!lv0fxu7^br^*341squ(uv(-z8=1#$_*_1-'
 ALLOWED_HOSTS = ["localhost","127.0.0.1"]
 INSTALLED_APPS = [
+    # ------- Created and 3rd party apps ---------
+    'daphne',
+    'app_users',
+    'app_chat',
+    'app_home',
+    'app_account',
+    'django_htmx',
+
+    # --------- In Built Apps ---------
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app_users',
-    'app_chat',
-    'app_home',
-    'app_account',
-    'django_htmx',
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -67,7 +71,17 @@ TEMPLATES = [
         },
     },
 ]
-WSGI_APPLICATION = 'core.wsgi.application'
+
+
+#  -========- Django Websocket Setup -==========-
+# WSGI_APPLICATION = 'core.wsgi.application'
+ASGI_APPLICATION = 'core.asgi.application'
+
+# -------------------------------------------------
+
+
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -75,14 +89,14 @@ DATABASES = {
     }
 }
 
-
+# ------- MYSQL Database Setup ------------
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'chatxity',
-#         'USER': 'root',
-#         'PASSWORD': '123456@@@@@@',
-#         'HOST': 'localhost',
+#         'NAME': '',
+#         'USER': '',
+#         'PASSWORD': '',
+#         'HOST': '',
 #     }
 # }
 
@@ -106,3 +120,6 @@ TIME_ZONE = 'Asia/Dhaka'
 USE_I18N = True
 USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
