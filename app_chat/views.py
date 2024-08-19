@@ -4,6 +4,7 @@ from .models import ChatGroup, GroupMessage
 from .forms import GroupMessageForm
 
 def inbox(request):
+    # This slug is manual right now.
     manual_slug = "mirpur-protesters-1"
 
     the_group = get_object_or_404(ChatGroup, slug=manual_slug)

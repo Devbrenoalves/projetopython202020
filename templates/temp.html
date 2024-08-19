@@ -1,28 +1,45 @@
-{% load static %}
-{% load ipost %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="{% static "js/htmx.min.js" %}"></script>
 
-</head>
-<body>
-    <h2>TESTING HTML CODE HERE </h2>
-    
-    <div id="xxyy">
+              <!-- Chat conversation START -->
+              <div id="chat-conversation-content" >
+                {% for msg in grp_messages %}
 
-    </div>
+                {% if msg.author == user %}
+                <!-- Chat message right -->
+                <div class="d-flex justify-content-end text-end mb-1">
+                  <div class="w-100">
+                    <div class="d-flex flex-column align-items-end">
+                      <div class="bg-primary text-white p-2 px-3 rounded-2">
+                        {{msg.body}}
+                      </div>
+                      <div class="d-flex my-2">
+                        <div class="small text-secondary">{{msg.created_at}}</div>
+                        <div class="small ms-2"><i class="fa-solid fa-check"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-    <br>
-    <button
-    hx-get="{% url "temp_partial" i %}" 
-    hx-target="#xxyy" 
-    hx-swap="innerHTML"
-    >ADD IMAGE 
-    </button>
-        
-</body>
-</html>
+                <!-- Chat time -->
+                <div class="text-center small my-2">2 New Messages</div>
+                {% else %}
+                <!-- Chat message left -->
+                <div class="d-flex mb-1">
+                  <div class="flex-shrink-0 avatar avatar-xs me-2">
+                    <img class="avatar-img rounded-circle" src="{{msg.author.profile.profile_picture.url}}" alt="">
+                  </div>
+                  <div class="flex-grow-1">
+                    <div class="w-100">
+                      <div class="d-flex flex-column align-items-start">
+                        <div class="bg-light text-secondary p-2 px-3 rounded-2">
+                          {{msg.body}}</div>
+                        <div class="small my-2">{{msg.created_at}}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+
+                {% endfor %}
+              </div>
+              <!-- Chat conversation END -->
+              
