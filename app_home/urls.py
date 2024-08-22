@@ -20,8 +20,5 @@ urlpatterns = [
     path('feed_comment/<str:post_uid>/', views.feed_comment, name='feed_comment'),
     path('add_post_images/<str:itr>/', views.add_post_images, name="add_post_images"),
     
-    path('temp/', views.temp, name="temp"),
-    path('temp-p/<str:itr>/', views.temp_partial, name="temp_partial"),
-
 
 ]

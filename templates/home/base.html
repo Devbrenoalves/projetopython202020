@@ -76,7 +76,7 @@
     <!-- Plugins CSS -->
     <link rel="stylesheet" type="text/css" href="{% static "css/all.min.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap-icons.css" %}">
-    {% comment %} <link rel="stylesheet" type="text/css" href="{% static "css/OverlayScrollbars.min.css" %}"> {% endcomment %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/OverlayScrollbars.min.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "css/tiny-slider.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "css/choices.min.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "css/glightbox.min.css" %}">
@@ -135,13 +135,18 @@
             <!-- Nav Search END -->
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
               <li class="nav-item">
-                <a class="nav-link" href="{% url "homepage" %}">Home</a>
+                <a class="nav-link" href="{% url "homepage" %}">NewsFeed</a>
               </li>
             </ul>
           </div>
           <!-- Main navbar END -->
           <!-- Nav right START -->
           <ul class="nav flex-nowrap align-items-center ms-sm-3 list-unstyled">
+            <li class="nav-item ms-2">
+              <a class="nav-link bg-light icon-md btn btn-light p-0" href="{% url "homepage" %}">
+              <i class="bi bi-house-fill fs-6"> </i>
+              </a>
+            </li>
             <li class="nav-item ms-2">
               <a class="nav-link bg-light icon-md btn btn-light p-0" href="{% url "inbox" %}">
               <i class="bi bi-envelope-fill fs-6"> </i>
@@ -152,63 +157,9 @@
               <i class="bi bi-gear-fill fs-6"> </i>
               </a>
             </li>
-            <li class="nav-item dropdown ms-2">
-              <a class="nav-link bg-light icon-md btn btn-light p-0" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-              <span class="badge-notif animation-blink"></span>
-              <i class="bi bi-bell-fill fs-6"> </i>
-              </a>
-              <div class="dropdown-menu dropdown-animation dropdown-menu-end dropdown-menu-size-md p-0 shadow-lg border-0" aria-labelledby="notifDropdown">
-                <div class="card">
-                  <div class="card-header d-flex justify-content-between align-items-center">
-                    <h6 class="m-0">Notifications <span class="badge bg-danger bg-opacity-10 text-danger ms-2">{{user.profile.notifications.count}} new</span></h6>
-                    <a class="small" href="#">Mark all as read</a>
-                  </div>
-                  <div class="card-body p-0">
-                    <ul class="list-group list-group-flush list-unstyled p-2">
-                                        
-                      <!-- Notif  items -->
-                      {% comment %} <li>
-                        <div class="badge-unread list-group-item  list-group-item-action rounded  d-flex border-0 mb-1 p-3">
-                          <div class="avatar text-center d-none d-sm-inline-block">
-                            <img class="avatar-img rounded-circle" src="images/01_2.jpg" alt="">
-                          </div>
-                          <div class="ms-sm-3">
-                            <div class=" d-flex">
-                              <p class="small mb-2"><b>Mark Zukerburg</b> sent you a friend request.</p>
-                              <p class="small ms-3 text-nowrap">Just now</p>
-                            </div>
 
-                            <div class="d-flex">
-                              <button class="btn btn-sm py-1 btn-primary me-2">Accept </button>
-                              <button class="btn btn-sm py-1 btn-danger-soft">Delete </button>
-                            </div>
-                          </div>
-                        </div>
-                      </li> {% endcomment %}
-
-                      {% for notice in user.profile.notifications.all %}
-                      <li>
-                        <a href="#" class=" {% if notice.seen %}{% else %}badge-unread{% endif %} list-group-item list-group-item-action rounded d-flex border-0 p-3 mb-1">
-                          <div class="avatar text-center d-none d-sm-inline-block">
-                            <img class="avatar-img rounded-circle" src="{% static "images/notify.svg" %}" alt="">
-                          </div>
-                          <div class="ms-sm-3 d-flex">
-                            <p class="small mb-2"><b>{{notice.category|title}}:</b> {{notice.title}}</p>
-                            <p class="small ms-3">{{notice.created}}</p>
-                          </div>
-                        </a>
-                      </li>
-                      {% endfor %}
-
-                    </ul>
-
-                  </div>
-                  <div class="card-footer text-center">
-                    <a href="#" class="btn btn-sm btn-primary-soft">See all incoming activity</a>
-                  </div>
-                </div>
-              </div>
-            </li>
+            {% include "home/partials/notice.html" %}
+            
             <!-- Notification dropdown END -->
             <li class="nav-item ms-2 dropdown">
               <a class="nav-link btn icon-md p-0" href="#" id="profileDropdown" role="button" data-bs-auto-close="outside" data-bs-display="static" data-bs-toggle="dropdown" aria-expanded="false">
@@ -297,12 +248,14 @@
     <script src="{% static "js/tiny-slider.js" %}"></script>
     <script src="{% static "js/OverlayScrollbars.min.js" %}"></script>
     <script src="{% static "js/choices.min.js" %}"></script>
-    <script src="{% static "js/glightbox.min.js" %}"></script>
-    <script src="{% static "js/flatpickr.min.js" %}"></script>
-    <script src="{% static "js/plyr.js" %}"></script>
-    <script src="{% static "js/dropzone.min.js" %}"></script>
     <script src="{% static "js/zuck.min.js" %}"></script>
-    <script src="{% static "js/zuck-stories.js" %}"></script>
+    <script src="{% static "js/flatpickr.min.js" %}"></script>
+    <script src="{% static "js/zuck-stories.js" %}"></script> 
+    <script src="{% static "js/plyr.js" %}"></script>
+    <script src="{% static "js/glightbox.min.js" %}"></script>
+    <script src="{% static "js/dropzone.min.js" %}"></script>
+    {% comment %} 
+    {% endcomment %}
     <script src="{% static "js/functions.js" %}"></script>
     {% block js %}{% endblock js %}
   </body>

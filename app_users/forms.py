@@ -49,6 +49,10 @@ class CommonRegistrationForm(UserCreationForm):
  
 
 class ProfileForm(forms.ModelForm):
+    birthday = forms.DateField(
+            widget=forms.TextInput(attrs={'type': 'date'}),
+            input_formats=['%Y-%m-%d']
+            )    
     class Meta:
         model = Profile
         fields = "__all__"

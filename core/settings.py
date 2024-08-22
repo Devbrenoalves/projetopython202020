@@ -27,7 +27,7 @@ LOGIN_URL = "/auth/login/"
 #  --------------------------==========-------------------------------
 
 SECRET_KEY = 'django-insecure-&8$jipu$mg1ap2l!lv0fxu7^br^*341squ(uv(-z8=1#$_*_1-'
-ALLOWED_HOSTS = ["localhost","127.0.0.1"]
+ALLOWED_HOSTS = ["localhost","127.0.0.1", "www.bloome.pythonanywhere.com","bloome.pythonanywhere.com"]
 INSTALLED_APPS = [
     # ------- Created and 3rd party apps ---------
     'daphne',
@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'app_home',
     'app_account',
     'django_htmx',
+    
 
     # --------- In Built Apps ---------
     'django.contrib.admin',
@@ -77,6 +78,12 @@ TEMPLATES = [
 # WSGI_APPLICATION = 'core.wsgi.application'
 ASGI_APPLICATION = 'core.asgi.application'
 
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
 # -------------------------------------------------
 
 

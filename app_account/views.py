@@ -4,8 +4,25 @@ from app_home.models import Friends, PostImage
 from app_users.forms import ProfileForm
 from django.contrib import messages
 from app_home.utilities import login_requirements
+import time
 
 from .forms import FriendPrivacy
+
+
+# 21/08/2024
+@login_requirements()
+def delete_account(request):
+    confirm = request.GET.get("confirmation")
+
+    if confirm=='on':
+        user = request.user
+        messages.warning(request,"Your Account is being deleted!")
+        time.sleep(5)
+        user.delete()
+        messages.error(request,"Your Account is deleted permanently!")
+        return redirect("homepage")
+    else:
+        return render(request, "settings/main/delete_account.html")
 
 # 20-07-2024 ----- (DONE)
 @login_requirements()

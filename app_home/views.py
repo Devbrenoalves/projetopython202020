@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from .forms import CreatePostForm
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponseRedirect, HttpResponse
 from django.contrib import messages
+from django.db.models import Q
 
 from app_users.models import Profile, User
 from .models import Posts, Like, Comment, FriendRequests, Friends, PostImage
@@ -273,26 +274,22 @@ def search(request):
     and match the charecter with username contains in the matched query or not.
     '''
     profile = request.user.profile
-    q = request.GET.get('q')
+    qury = request.GET.get('q')
     results = []
     frnd_reqs = FriendRequests.objects.filter(sender=profile, accepted=False)
     got_reqs = FriendRequests.objects.filter(author=profile, accepted=False)
     
-    if q:
-        # HERE HAVE TO IMPROVE TO FIND THE USER WITH MULTIPLE - username, f_name, L-name >>
-        # results = Profile.objects.filter(profile__user__username__icontains=q)
-        results = Profile.objects.filter(user__username__icontains=q,fill_up=True,registered=True)
-        try:
-            print(results)
-            print(frnd_reqs)
-
-        except Exception as e:
-            print(dir(results))
-            print(e)
-
+    if qury:
+       
+        results = Profile.objects.filter(Q(user__username__icontains=qury) 
+                                         | Q(first_name__icontains=qury) 
+                                         | Q(last_name__icontains=qury)
+                                         
+                                         )
+        results=results.filter(registered=True).order_by("first_name")[0:100]
     context={
         "search_results":results,
-        "s_query":q,
+        "s_query":qury,
         "frnd_reqs":[ x.author for x in frnd_reqs],
         "got_reqs": [ x.sender for x in got_reqs],
     }
@@ -370,8 +367,8 @@ def view_profile(request, name):
 
     form=CreatePostForm()
     
-    # From here its logic to make a post with image upload
-    # FIXED and Now we will let user upload upto 1 image.
+    # From here its logic to make a post with image upload->
+    # ISSUE FIXED SUCCESS and Now we will let user upload upto 1 image.
     if request.method=="POST":     
         form=CreatePostForm(request.POST)
         last_img_no = request.POST.get('last_image')
@@ -394,6 +391,10 @@ def view_profile(request, name):
                             )
                             post_image_object.image = the_image
                             post_image_object.save()
+                        
+                        # This brake will prevent user to upload more than 1 image,
+                        # In production remove break when a dedicated storage will there.
+                        break
                     messages.success(request,"Images uploaded successfully!")
 
                 except Exception as e:
@@ -471,28 +472,3 @@ def delete_post(r, p_id):
     # return JsonResponse({'success': True})
 
 # =============== TEMPRORARY TESTING ROUTE ====================
-
-import uuid
-
-def temp(request):
-    i = 0
-    context = {
-        "i":i,
-    }
-    return render(request, "temp.html", context)
-
-def temp_partial(request, itr):
-    if request.htmx:
-        if request.method=="POST":
-            form = PostImageForm(request.POST)
-        else:
-            form = PostImageForm()
-
-        i =int(itr)+1
-        context={
-            "i": i,
-            "form": form,
-                }
-        return render(request, "temp_p.html", context)
-    
-    return redirect("homepage")
