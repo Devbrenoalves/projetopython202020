@@ -28,7 +28,7 @@ Live Website: https://bloome.pythonanywhere.com/
 <br>
 Mail: demo@gmail.com
 <br>
-Password: 111111qqqqqq
+Password: demo1234
 
 ## Demo Screenshots
 
