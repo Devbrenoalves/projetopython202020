@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ["localhost","127.0.0.1", "www.bloome.pythonanywhere.com","bloom
 INSTALLED_APPS = [
     # ------- Created and 3rd party apps ---------
     'daphne',
+    'channels',
     'app_users',
     'app_chat',
     'app_home',
@@ -75,7 +76,19 @@ TEMPLATES = [
 
 
 #  -========- Django Websocket Setup -==========-
-# WSGI_APPLICATION = 'core.wsgi.application'
+
+# ASGI_APPLICATION = "core.asgi.application" # your project name
+
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer", # Or other backend
+#         "CONFIG": {
+#             "hosts": [("127.0.0.1", 6379)], #  Redis server
+#         },
+#     },
+# }
+
+# # WSGI_APPLICATION = 'core.wsgi.application'
 ASGI_APPLICATION = 'core.asgi.application'
 
 
