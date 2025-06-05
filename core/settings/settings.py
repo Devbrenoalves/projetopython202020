@@ -1,33 +1,29 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
+
+
+#  ------ One more parent directory to reach the project root ------>>
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # ------- COMMON CODE FOR HANDLE MEDA, STATIC and TEMPLATES ---------
-DEBUG = True
-BASE_DIR = Path(__file__).resolve().parent.parent
-if DEBUG:
-    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-else:
-    STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
 TEMPLATE_DIR = os.path.join(BASE_DIR , 'templates')
 MEDIA_DIR = os.path.join(BASE_DIR , 'media')
-
 STATIC_URL = 'static/'
 MEDIA_URL = '/media/'
-
 MEDIA_ROOT = MEDIA_DIR
 
-
-# --=====> EXTRA <=====------
-
+# -------------=====> EXTRA <=====------------------
 AUTH_USER_MODEL = 'app_users.User'
 LOGIN_URL = "/auth/login/"
-# ---------======== ----------
+# --------------------========----------------------
 
-#  --------------------------==========-------------------------------
 
-SECRET_KEY = 'django-insecure-&8$jipu$mg1ap2l!lv0fxu7^br^*341squ(uv(-z8=1#$_*_1-'
+
+SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-secret-key')
 ALLOWED_HOSTS = ["localhost","127.0.0.1", "www.bloome.pythonanywhere.com","bloome.pythonanywhere.com"]
+
 INSTALLED_APPS = [
     # ------- Created and 3rd party apps ---------
     'daphne',
@@ -38,7 +34,6 @@ INSTALLED_APPS = [
     'app_account',
     'django_htmx',
     
-
     # --------- In Built Apps ---------
     'django.contrib.admin',
     'django.contrib.auth',
@@ -101,26 +96,6 @@ CHANNEL_LAYERS = {
 
 
 
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
-# ------- MYSQL Database Setup ------------
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': '',
-#         'USER': '',
-#         'PASSWORD': '',
-#         'HOST': '',
-#     }
-# }
-
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -142,4 +117,7 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-
+#  --------================ LOAD =============------------
+from ..credentials.cloud_storage  import *
+from ..credentials.oauth import *
+from ..credentials.payment_or_error import *

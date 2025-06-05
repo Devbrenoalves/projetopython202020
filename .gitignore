@@ -7,7 +7,7 @@ __pycache__/
 media/
 api.http
 local_settings.py
-local.py
+
 # Django stuff:
 *.log
 db.sqlite3
