@@ -78,3 +78,24 @@ def login_page(request):
             messages.error(request,"May be credentials not valid!")
 
     return render(request, "auth/login.html")
+
+
+
+
+def demo_login(request):
+    if request.user.is_authenticated:
+        messages.warning(request,"You are already loggedIn !")
+        return redirect("homepage")
+    
+    # demo user credentials
+    email = "demo@gmail.com"
+    password = "demo1234"
+
+    user = authenticate(email=email, password=password)
+    if user is not None:
+        login(request, user)
+        messages.success(request, "Demo login success! Welcome.")
+        return redirect("homepage")
+    else:
+        messages.error(request, "Demo login failed. Please try again.")
+        return redirect("login_page")

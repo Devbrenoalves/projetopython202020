@@ -6,4 +6,7 @@ urlpatterns = [
     path('login/',views.login_page, name="login_page"),
     path('logout/',views.logout_view, name="logout"),
 
+    # demo for user testing and visit my site
+    path('demo/login/', views.demo_login, name="demo_login"),
+
 ]
