@@ -6,10 +6,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('chat/', include("app_chat.urls")),
-    path('', include("app_home.urls")),
-    path('auth/', include("app_users.urls")),
-    path('account/', include("app_account.urls")),
+    path('chat/', include("apps.app_chat.urls")),
+    path('', include("apps.app_home.urls")),
+    path('auth/', include("apps.app_users.urls")),
+    path('account/', include("apps.app_account.urls")),
     path('admin/', admin.site.urls),
     
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),

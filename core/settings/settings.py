@@ -28,11 +28,12 @@ INSTALLED_APPS = [
     # ------- Created and 3rd party apps ---------
     'daphne',
     'channels',
-    'app_users',
-    'app_chat',
-    'app_home',
-    'app_account',
     'django_htmx',
+
+    'apps.app_users',
+    'apps.app_chat',
+    'apps.app_home',
+    'apps.app_account',
     
     # --------- In Built Apps ---------
     'django.contrib.admin',
