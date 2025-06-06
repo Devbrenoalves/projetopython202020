@@ -28,11 +28,13 @@ INSTALLED_APPS = [
     # ------- Created and 3rd party apps ---------
     'daphne',
     'channels',
-    'app_users',
-    'app_chat',
-    'app_home',
-    'app_account',
     'django_htmx',
+    'social_django',
+
+    'apps.app_users',
+    'apps.app_chat',
+    'apps.app_home',
+    'apps.app_account',
     
     # --------- In Built Apps ---------
     'django.contrib.admin',
@@ -121,3 +123,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 from ..credentials.cloud_storage  import *
 from ..credentials.oauth import *
 from ..credentials.payment_or_error import *
+
+from .mail_settings import *
+
+LIVE_SITE_URL_RN=os.getenv('LIVE_SITE_URL_RN', 'http://localhost:8000/')
