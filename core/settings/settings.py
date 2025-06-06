@@ -22,11 +22,11 @@ LOGIN_URL = "/auth/login/"
 
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-secret-key')
-ALLOWED_HOSTS = ["localhost","127.0.0.1", "www.bloome.pythonanywhere.com","bloome.pythonanywhere.com"]
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 
 INSTALLED_APPS = [
     # ------- Created and 3rd party apps ---------
-    'daphne',
+    # 'daphne',
     'channels',
     'django_htmx',
     'social_django',
@@ -85,8 +85,8 @@ TEMPLATES = [
 #     },
 # }
 
-# # WSGI_APPLICATION = 'core.wsgi.application'
-ASGI_APPLICATION = 'core.asgi.application'
+WSGI_APPLICATION = 'core.wsgi.application'
+# ASGI_APPLICATION = 'core.asgi.application'
 
 
 CHANNEL_LAYERS = {
