@@ -126,4 +126,7 @@ from ..credentials.payment_or_error import *
 
 from .mail_settings import *
 
+CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
+
+
 LIVE_SITE_URL_RN=os.getenv('LIVE_SITE_URL_RN', 'http://localhost:8000/')
