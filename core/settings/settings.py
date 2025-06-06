@@ -9,10 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # ------- COMMON CODE FOR HANDLE MEDA, STATIC and TEMPLATES ---------
 TEMPLATE_DIR = os.path.join(BASE_DIR , 'templates')
-MEDIA_DIR = os.path.join(BASE_DIR , 'media')
 STATIC_URL = 'static/'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = MEDIA_DIR
 
 # -------------=====> EXTRA <=====------------------
 AUTH_USER_MODEL = 'app_users.User'
@@ -26,6 +23,7 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 
 INSTALLED_APPS = [
     # ------- Created and 3rd party apps ---------
+    'storages',
     'daphne',
     'channels',
     'django_htmx',
@@ -169,3 +167,13 @@ CORS_ALLOWED_ORIGINS = [
 
 # -------------=====> LIVE SITE URL <=====------------------
 LIVE_SITE_URL_RN=os.getenv('LIVE_SITE_URL_RN', 'http://localhost:8000/')
+
+
+
+# ---------- STORAGE SETTINGS -------------
+
+MEDIA_DIR = os.path.join(BASE_DIR , 'media')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = MEDIA_DIR
+
+from ..credentials.cloud_storage import *
