@@ -120,13 +120,52 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 #  --------================ LOAD =============------------
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1048576000
+FILE_UPLOAD_MAX_MEMORY_SIZE = 1048576000
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10000
+
+# -------------=====> ENVIRONMENT VARIABLES <=====------------------
 from ..credentials.cloud_storage  import *
 from ..credentials.oauth import *
 from ..credentials.payment_or_error import *
 
 from .mail_settings import *
 
+# -------------=====> CSRF and CORS <=====------------------
 CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://bloome.onrender.com",
+    "http://bloome.onrender.com",
+    "https://bloome.onrender.com/",
+    "http://bloome.onrender.com/",
+    "http://44.226.145.213",
+    "http://54.187.200.255",
+    "http://34.213.214.55",
+    "http://35.164.95.156",
+    "http://44.230.95.183",
+    "http://44.229.200.200",
 
+]
+
+CSRF_TRUSTED_ORIGINS += ["https://*.onrender.com"]
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = [
+    "https://bloome.onrender.com",
+    "http://bloome.onrender.com",
+    "https://bloome.onrender.com/",
+    "http://bloome.onrender.com/",
+    "http://44.226.145.213",
+    "http://54.187.200.255",
+    "http://34.213.214.55",
+    "http://35.164.95.156",
+    "http://44.230.95.183",
+    "http://44.229.200.200",
+
+]
+
+# -------------=====> LIVE SITE URL <=====------------------
 LIVE_SITE_URL_RN=os.getenv('LIVE_SITE_URL_RN', 'http://localhost:8000/')

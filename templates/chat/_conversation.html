@@ -3,11 +3,20 @@
 
   <!-- header -->
   <div class="card-header d-flex align-items-center">
+
+
     <img class="avatar avatar-sm rounded-circle me-2"
          src="{{ other_user.profile.profile_picture.url }}"
          alt="{{ other_user.username }}">
-    <h6 class="mb-0">{{ other_user.get_full_name|default:other_user.username }}</h6>
-
+    <h6 class="mb-0 me-4">{{ other_user.get_full_name|default:other_user.username }}</h6>
+    
+    <div class="f-right">
+      <!-- Call button -->
+      <a href="#!" class="icon-md rounded-circle btn btn-primary-soft me-2 px-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Audio call"><i class="bi bi-telephone-fill"></i></a>
+      <a href="#!" class="icon-md rounded-circle btn btn-primary-soft me-2 px-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Video call"><i class="bi bi-camera-video-fill"></i></a>
+    </div>
+    <!-- Card action START -->
+    
     <!-- small back button for mobile -->
     <button class="btn btn-sm btn-link d-lg-none ms-auto"
             data-bs-toggle="offcanvas"
