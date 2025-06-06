@@ -26,7 +26,7 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 
 INSTALLED_APPS = [
     # ------- Created and 3rd party apps ---------
-    # 'daphne',
+    'daphne',
     'channels',
     'django_htmx',
     'social_django',
@@ -85,8 +85,8 @@ TEMPLATES = [
 #     },
 # }
 
-WSGI_APPLICATION = 'core.wsgi.application'
-# ASGI_APPLICATION = 'core.asgi.application'
+# WSGI_APPLICATION = 'core.wsgi.application'
+ASGI_APPLICATION = 'core.asgi.application'
 
 
 CHANNEL_LAYERS = {
