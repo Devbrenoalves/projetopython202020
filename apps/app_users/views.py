@@ -6,8 +6,8 @@ from django.contrib import messages
 from .forms import CommonRegistrationForm, ProfileForm
 from .models import Profile
 
+from .utils import send_welcome_email
 
-# Create your views here.
 def registration(request):
     if request.method == "POST":
         form = CommonRegistrationForm(request.POST)
@@ -15,15 +15,28 @@ def registration(request):
             form.save()
             user = form.instance
             login(request, user)
-            messages.success(request,"Register done!")
-            
+            messages.success(request, "Register done!")
+
+            # sending welcome email by celery task
+            # ---->> Uncomment [Cz I am using pythonanywhere🤦‍♂️]<<----
+            try:
+                # from .tasks import async_send_welcome
+                # async_send_welcome.delay(user.uid)
+                send_welcome_email(user.email, user.username)
+
+            except Exception as exc:
+                import logging
+                logging.exception("Could not send welcome email", exc_info=exc)
+                print(f"Error sending welcome email: {exc}")
+                
+            messages.success(request, "Welcome to Bloome! Please complete your profile.")
+
             return redirect("signup_details")
     else:
         form = CommonRegistrationForm()
-    context = {
-        "form":form
-    }
-    return render(request, "auth/signup.html", context)
+
+    return render(request, "auth/signup.html", {"form": form})
+
 
 @login_required
 def registration_step2(request):
