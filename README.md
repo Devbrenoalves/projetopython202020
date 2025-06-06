@@ -24,11 +24,28 @@ This project is a FullStack Django based Social Network Website similar to Faceb
 
 ## Demo:
 
-Live Website: https://bloome.pythonanywhere.com/
+Live Website: https://bloome.onrender.com/
 <br>
 Mail: demo@gmail.com
 <br>
 Password: demo1234
+
+### 🌐 Hosting switch: **PythonAnywhere → Render**
+
+**Heads-up!**
+* 🔌 The free instance sleeps, so the first visitor wakes it – expect a short delay.<br>
+* 📊 Keep an eye on the 750-hour budget if you enable background workers or Celery Beat.<br>
+* 🏷 Preview environments generate extra on-render.com sub-domains; remember to add them to<br>  `ALLOWED_HOSTS` **and** `CSRF_TRUSTED_ORIGINS` (wildcard works: `https://*.onrender.com`). |
+
+ **✨ New in Render Build:**  
+ * Collects static files with `--noinput`  
+ * Runs DB migrations automatically  
+ * Serves via **UvicornWorker** → `gunicorn core.asgi:application -k uvicorn.workers.UvicornWorker`
+
+![Render badge](https://img.shields.io/badge/hosted%20on-render-purple?logo=render) 
+![WebSockets badge](https://img.shields.io/badge/websockets-enabled-brightgreen?logo=fastapi) 
+![Sleep badge](https://img.shields.io/badge/free%20plan-auto--sleep-yellow)
+
 
 ## Demo Screenshots
 
