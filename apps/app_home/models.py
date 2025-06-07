@@ -2,7 +2,7 @@ from typing import Iterable, Optional
 from django.db import models
 import uuid
 from apps.app_users.models import Profile
-
+from core.settings.content_path import UserContentPath
 
 class CommonBaseModel(models.Model):
     uid = models.UUIDField(primary_key=True, default= uuid.uuid4, editable=False)
@@ -35,7 +35,14 @@ class Posts(CommonBaseModel):
 
 class PostImage(CommonBaseModel):
     post = models.ForeignKey(Posts, related_name='images', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='post_images/')
+    image = models.ImageField(upload_to=UserContentPath('post_images', include_date=True))
+
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="post_images", null=True, blank=True)
+    
+    def save(self, *args, **kwargs):
+        if not self.author:
+            self.author = self.post.author
+        super().save(*args, **kwargs)
 
 
 class Like(CommonBaseModel):
@@ -66,7 +73,7 @@ class Comment(CommonBaseModel):
 class Story(CommonBaseModel):
     author = models.ForeignKey( Profile ,on_delete=models.CASCADE)
     content = models.TextField()
-    image = models.ImageField(upload_to='stories/', blank=True, null=True)
+    image = models.ImageField(upload_to=UserContentPath('stories', include_date=True), blank=True, null=True)
     expires_at = models.DateTimeField()
     privacy = models.CharField(max_length=50, choices=MODES, default="public")
     

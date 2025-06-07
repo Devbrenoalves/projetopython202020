@@ -7,6 +7,9 @@ import uuid
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+
+from core.settings.content_path import UserContentPath
+
 class CommonBaseModel(models.Model):
     uid = models.UUIDField(primary_key=True, default= uuid.uuid4, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -73,9 +76,9 @@ class Profile(CommonBaseModel):
     phone_number = models.CharField(max_length=15)
     gender = models.CharField(max_length=10, choices=GENDER)
     birthday = models.DateField(blank=True, null=True)
-    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, default="default.png")
+    profile_picture = models.ImageField(upload_to=UserContentPath('profile_pictures'), blank=True, default="default.png")
     bio = models.CharField(max_length=300, null=True,blank=True)
-    cover_photo = models.ImageField(upload_to="cover_pic/",null=True, blank=True,default="cover.png")
+    cover_photo = models.ImageField(upload_to=UserContentPath("cover_pic"),null=True, blank=True,default="cover.png")
     fill_up = models.BooleanField(default=False)
     registered = models.BooleanField(default=False)
     
