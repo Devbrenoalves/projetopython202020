@@ -5,6 +5,7 @@ urlpatterns = [
     # path('create/',views.create_post, name="create_post"),
     path('like/<str:post_id>/', views.like_post, name='like_post'),
     path('send-request/', views.send_friend_request, name="send_friend_request"),
+    path('cancel-request/', views.cancel_friend_request, name="cancel_friend_request"),
     path('accept/<str:usr>/', views.accept_request, name="accept_req"),
     path('post/<str:p_id>/', views.view_one_post, name="view_one_post"),
     path('search/', views.search, name='search'),    

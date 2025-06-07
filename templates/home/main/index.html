@@ -204,31 +204,49 @@
             {% for prsn in people %}
             {% if prsn not in friends %}
             <div>
-                <!-- Card add friend item START -->
-                <div class="card shadow-none text-center">
-                    <!-- Card body -->
-                    <div class="card-body p-2 pb-0">
-                        <div class="avatar avatar-xl">
-                            <a href="#!"><img class="avatar-img rounded-circle" src="{{prsn.profile_picture.url}}" alt=""></a>
+                <div>
+                    <!-- Card add friend item START -->
+                    <div class="card shadow-none text-center">
+                        <!-- Card body -->
+                        <div class="card-body p-2 pb-0">
+                            <div class="avatar avatar-xl">
+                                <a href="#!"><img class="avatar-img rounded-circle" src="{{prsn.profile_picture.url}}" alt=""></a>
+                            </div>
+                            <h6 class="card-title mb-1 mt-3"> <a href="#!"> {{prsn.first_name}} </a></h6>
+                            <p class="mb-0 small lh-sm">5 mutual connections</p>
                         </div>
-                        <h6 class="card-title mb-1 mt-3"> <a href="#!"> {{prsn.first_name}} </a></h6>
-                        <p class="mb-0 small lh-sm">5 mutual connections</p>
-                    </div>
-                    <!-- Card footer -->
-                    <form action="{% url "send_friend_request" %}" method="POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="the_person" value="{{prsn.user.username}}">
-                        <div class="card-footer p-2 border-0">                        
+                        
+                        <!-- Card footer with improved design -->
+                        <div class="card-footer p-2 border-0">
                             {% if prsn in request_list %}
-                            {% comment %} <button type="button" class="btn btn-sm btn-primary-soft w-100"> Request sent </button> {% endcomment %}
-                            <a href="#" class="btn btn-sm btn-danger-soft w-100 "> Cancel </a>
+                                <!-- Two buttons side by side when request is sent -->
+                                <div class="d-flex gap-1">
+                                    <button type="button" class="btn btn-sm btn-success-soft flex-fill" disabled>
+                                        <i class="fas fa-check me-1"></i>Sent
+                                    </button>
+                                    <form action="{% url 'cancel_friend_request' %}" method="POST" class="flex-fill">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="the_person" value="{{prsn.user.username}}">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger w-100">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             {% else %}
-                            <button type="submit" class="btn btn-sm btn-primary-soft w-100"> Add friend </button>
+                                <!-- Single add friend button -->
+                                <form action="{% url 'send_friend_request' %}" method="POST">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="the_person" value="{{prsn.user.username}}">
+                                    <button type="submit" class="btn btn-sm btn-primary-soft w-100">
+                                        <i class="fas fa-user-plus me-1"></i>Add friend
+                                    </button>
+                                </form>
                             {% endif %}
                         </div>
-                    </form>
+                    </div>
+                    <!-- Card add friend item END -->
                 </div>
-                <!-- Card add friend item END -->
+                
             </div>
             {% endif %}
             {% endfor %}
