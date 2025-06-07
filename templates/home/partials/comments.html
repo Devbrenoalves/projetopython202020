@@ -1,3 +1,5 @@
+{% load ipost %}
+
 <div id="divchanger">
     <!-- Add Comment Form -->
     <form class="nav nav-item w-100 position-relative mb-2" method="POST" novalidate>
@@ -28,15 +30,15 @@
                     <div class="ms-2">
                         <div class="bg-light p-3 rounded">
                             <div class="d-flex justify-content-between">
-                                <h6 class="mb-1"> <a href="#">{{comment.user.first_name}}</a> </h6>
-                                <small class="ms-2">1 hr</small>
+                                <h6 class="mb-1"> <a href="#">{{comment.user.first_name|truncatechars:":4"}}</a> </h6>
+                                <small class="ms-2">{{comment.created_at|brief_datetime}}</small>
                             </div>
                             <p class="small mb-0">{{comment.content}}</p>
                         </div>
                         <!-- Comment react -->
                         <ul class="nav nav-divider pt-2 small">
                             <li class="nav-item">
-                                <a class="nav-link" href="#"> Like (1)</a>
+                                <a class="nav-link" href="#"> Like</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#"

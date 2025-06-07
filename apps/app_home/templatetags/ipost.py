@@ -1,5 +1,8 @@
 from django import template
 from apps.app_home.models import Posts, Friends, FriendRequests
+from datetime import datetime
+from datetime import timedelta
+from django.utils import timezone
 
 register = template.Library()
 
@@ -40,3 +43,34 @@ def likers(the_post):
     the_reactors = the_post.likes.all()
     
     return [x.user for x in the_reactors]
+
+
+
+@register.filter(name="comment_time_fixer")
+def comment_time_fixer(time):
+    now = timezone.now()
+    diff = now - time
+
+    seconds = int(diff.total_seconds())
+
+    if seconds < 60:
+        return f"{seconds} sec"
+    elif seconds < 3600:
+        return f"{seconds//60} min"
+    elif seconds < 86400:
+        return f"{seconds//3600} hr"
+    elif diff.days < 365:
+        return f"{diff.days} day"
+    else:
+        return f"{diff.days//365} yr"
+    
+
+@register.filter(name="brief_datetime")
+def brief_datetime(value):
+    if not value:
+        return ""
+
+    dt = timezone.localtime(value)
+    date_part = dt.strftime("%y/%m/%d")
+    time_part = dt.strftime("%I:%M%p").lstrip("0")
+    return f"{date_part}, {time_part}"
