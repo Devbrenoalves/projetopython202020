@@ -182,7 +182,7 @@ def cancel_friend_request(request):
             person = request.POST.get("the_person")
             author_whom_sending_request = get_object_or_404(Profile, user__username=person.strip())
             
-            # Check if the friend request exists
+            # if the friend request exists
             existing_request = FriendRequests.objects.filter(
                 author=author_whom_sending_request,
                 sender=request.user.profile
@@ -194,7 +194,6 @@ def cancel_friend_request(request):
             else:
                 messages.error(request, "No such friend request found!")
                 
-            # Redirect back to the referring page
             return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
         except Exception as e:
             messages.warning(request, f"{e}")
