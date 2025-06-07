@@ -4,65 +4,108 @@
 
 </h4>
 
-<h4 align='center'>
-  
-![Static Badge](https://img.shields.io/badge/version-1.0.0-red)
-![Static Badge](https://img.shields.io/badge/bloome-fullstack_social_network-blue)
-![Static Badge](https://img.shields.io/badge/python-django-green)
-</h4>
 
-<hr>
-<h2 align='center'> Fullstack Django social media web app with newsfeed, chat, friends and so on. </h2>
+<h1 align="center">
+  Bloome &nbsp;·&nbsp; Full-Stack Social Network
+</h1>
 
-
-<p>
-This project is a FullStack Django based Social Network Website similar to Facebook •	Newsfeed, Chat system, Friend Request send and receive, Likes, Comments and so on.
-
-  Technologies: Django, HTMX, Python, Bootstrap, CSS, JS, WebSocket, Django-Channel 
-
+<p align="center">
+  <a href="https://img.shields.io/badge/version-2.0.0-red">
+    <img src="https://img.shields.io/badge/version-2.0.0-red" alt="version" />
+  </a>
+  <a href="https://img.shields.io/badge/bloome-fullstack_social_network-blue">
+    <img src="https://img.shields.io/badge/bloome-fullstack_social_network-blue" alt="title badge" />
+  </a>
+  <a href="https://img.shields.io/badge/python-django-green">
+    <img src="https://img.shields.io/badge/python-django-green" alt="django badge" />
+  </a>
+  <a href="https://img.shields.io/badge/hosted%20on-render-purple?logo=render">
+    <img src="https://img.shields.io/badge/hosted%20on-render-purple?logo=render" alt="render badge" />
+  </a>
+  <a href="https://img.shields.io/badge/websockets-enabled-brightgreen?logo=fastapi">
+    <img src="https://img.shields.io/badge/websockets-enabled-brightgreen?logo=fastapi" alt="ws badge" />
+  </a>
+  <a href="https://img.shields.io/badge/free%20plan-auto--sleep-yellow">
+    <img src="https://img.shields.io/badge/free%20plan-auto--sleep-yellow" alt="sleep badge" />
+  </a>
 </p>
 
-## Demo:
+---
 
-Live Website: https://bloome.onrender.com/
-<br>
-Mail: demo@gmail.com
-<br>
-Password: demo1234
+> **Bloome** is a production-grade Django social-media platform featuring a news-feed, real-time one-to-one chat, friend requests, likes, comments, and media uploads.
 
-### 🌐 Hosting switch: **PythonAnywhere → Render**
+<details>
+<summary><strong>Table of contents</strong></summary>
 
-**Heads-up!**
-* 🔌 The free instance sleeps, so the first visitor wakes it – expect a short delay.<br>
-* 📊 Keep an eye on the 750-hour budget if you enable background workers or Celery Beat.<br>
-* 🏷 Preview environments generate extra on-render.com sub-domains; remember to add them to<br>  `ALLOWED_HOSTS` **and** `CSRF_TRUSTED_ORIGINS` (wildcard works: `https://*.onrender.com`). |
+- [Live demo](#live-demo)
+- [June 2025 New Update](#-june-2025-new-update)
+- [Feature tour](#feature-tour)
+- [Tech stack](#tech-stack)
+- [Screenshots](#screenshots)
+- [Quick Start(Local Setup)](#quick-startlocal-setup)
+</details>
 
- **✨ New in Render Build:**  
- * Collects static files with `--noinput`  
- * Runs DB migrations automatically  
- * Serves via **UvicornWorker** → `gunicorn core.asgi:application -k uvicorn.workers.UvicornWorker`
+---
 
-![Render badge](https://img.shields.io/badge/hosted%20on-render-purple?logo=render) 
-![WebSockets badge](https://img.shields.io/badge/websockets-enabled-brightgreen?logo=fastapi) 
-![Sleep badge](https://img.shields.io/badge/free%20plan-auto--sleep-yellow)
+## Live demo
 
+🌐 **URL:** <https://bloome.onrender.com>  
+🪄 **Demo account:** `demo@gmail.com` **Password:** `demo1234`  
 
-## Demo Screenshots
+⚠️ *Free tier sleeps after 15 min idle; first hit may take ~30 s to spin up.*
 
-<div class="image-container">
-<p align='center'>
-<img alt="demo" width="400" src="https://github.com/user-attachments/assets/680567a2-9bf2-4f3b-93a3-3b68ff28293e">
-<img alt="demo" width="300" src="https://github.com/user-attachments/assets/e98c0639-400c-4f8b-ac9c-d63a18c712fb">
-<hr>
-<img alt="demo" width="400" src="https://github.com/user-attachments/assets/cf7435d6-3848-481e-b390-b1680fc608a3">
-<img alt="demo" width="400" src="https://github.com/user-attachments/assets/3f79e369-b11e-40ac-bbd9-6820a803eff7">
+---
 
+## 🚀 June 2025 New Update
+
+| Pillar | What’s new | Why it matters |
+|--------|------------|----------------|
+| **Architecture & DX** | Re-organised project into a layered folder structure. Added `.gitignore`, sample `.env`, and commented S3 settings. | Accelerates onboarding and prevents secrets leakage. |
+| **Real-time features** | One-to-one chat via **Django Channels** + **Daphne** (ASGI). | Demonstrates WebSocket and async proficiency. |
+| **Cloud storage** | Integrated Backblaze **B2 S3** bucket for media uploads. | Shows cost-efficient object-storage skills. |
+| **Modern hosting** | Migrated PythonAnywhere → **Render** native-ASGI. | Hands-on container/cloud deployment experience. |
+| **Email & tasks** | Automated welcome email + full **Celery + Redis** setup ready for future jobs. | Production-ready background-job architecture. |
+| **Security** | Fixed CSRF issues; secrets/hosts now env-driven. | Secure-by-default mindset. |
+
+---
+
+## Feature tour
+
+- **News-feed** with likes, comments, and friend requests  
+- **Real-time chat** (WebSockets) with online presence  
+- **Async tasks** (Celery) powering welcome-email flow  
+- **Object storage** on Backblaze B2 (S3-compatible)  
+- **Zero-downtime deploys** on Render using Gunicorn + UvicornWorker  
+- **Responsive UI** built with Bootstrap 5 & HTMX  
+- **Modular settings** (`development.py`, `production.py`, `local.py`) ready for 12-factor apps  
+
+---
+
+## Tech stack
+
+| Layer        | Tools & Libraries                          |
+|--------------|--------------------------------------------|
+| **Frontend** | HTML / Bootstrap 5 · HTMX · CSS            |
+| **Backend**  | Django >= 4.x · Django Channels · Celery   |
+| **Async/WS** | Daphne · Redis broker                      |
+| **Database** | SQLite (dev) · MySQL (prod-ready)          |
+| **Storage**  | Backblaze B2 S3 bucket                     |
+| **CI/CD**    | GitHub Actions · Render deployment         |
+
+---
+
+## Screenshots
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/680567a2-9bf2-4f3b-93a3-3b68ff28293e" width="420" alt="newsfeed">
+  <img src="https://github.com/user-attachments/assets/e98c0639-400c-4f8b-ac9c-d63a18c712fb" width="320" alt="chat list"><br><br>
+  <img src="https://github.com/user-attachments/assets/cf7435d6-3848-481e-b390-b1680fc608a3" width="420" alt="profile">
+  <img src="https://github.com/user-attachments/assets/3f79e369-b11e-40ac-bbd9-6820a803eff7" width="420" alt="admin dashboard">
 </p>
-</div>
 
+---
 
-
-## Locally Setup
+## Quick Start(Local Setup)
 
 Note: You can add both MySQL or SQLite database. The configuration is added in the settings.py so you just have to uncomment the code and set database host, user, password and port. 
 
@@ -93,18 +136,12 @@ pip install -r requirements.txt
 python manage.py runserver
 
 ```
-** In case of migration problem migrate and then run the server **
+**In case of migration problem migrate and then run the server**
 ```bash 
 python manage.py makemigrations
 python manage.py migrate
 
 ```
-## Tech Stack
-
-**Front-End:** Html, CSS, Bootstrap, JavaScript
-
-**Back-End:** Django, Sqlite or MySQL, Python, JS, HTMX
-
 
 ## Author
 
