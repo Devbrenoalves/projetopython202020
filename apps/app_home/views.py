@@ -3,52 +3,92 @@ from django.http import JsonResponse
 from .forms import CreatePostForm
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponseRedirect, HttpResponse
 from django.contrib import messages
-from django.db.models import Q
 
 from apps.app_users.models import Profile, User
 from .models import Posts, Like, Comment, FriendRequests, Friends, PostImage
 from .forms import FriendRequestsForm,FriendsForm, PostImageForm
 
+from django.db.models import Q, Case, When, IntegerField, F, Count
+from django.utils import timezone
+from datetime import timedelta
+
+# UPDATED: 8/06/2025
 @login_requirements()
 def homepage(request):
-    # current loged in user profile
+    # Current logged in user profile
     profile = request.user.profile
 
-    all_post = Posts.objects.all()
-    # we can add logic here to recomend the friend suggestion
-    people = Profile.objects.filter(fill_up=True,registered=True)
-
-    # Filtering the friend request sended list to show in template
-    my_requests = FriendRequests.objects.filter(sender = profile)
-    request_lists = [ x.author for x in my_requests ]
-    
-    
+    #  user's friends
     existing_friend_object = Friends.objects.filter(author=profile).first()
-    friends = existing_friend_object.friend.all() if existing_friend_object else None
+    friend_profiles = existing_friend_object.friend.all() if existing_friend_object else []
+    friend_ids = [friend.uid for friend in friend_profiles]
     
+    #  intelligent newsfeed
+    all_post = Posts.objects.select_related('author').prefetch_related(
+        'images', 'likes', 'comments'
+    ).annotate(
+        # Count likes and comments for engagement score
+        likes_count=Count('likes', distinct=True),
+        comments_count=Count('comments', distinct=True),
+        
+        # Priority scoring system
+        priority_score=Case(
+            # Own posts get highest priority
+            When(author=profile, then=100),
+            # Friends' posts get high priority
+            When(author__uid__in=friend_ids, then=50),
+            # Other posts get base priority
+            default=10,
+            output_field=IntegerField()
+        ),
+        
+        # Time-based scoring (newer posts get higher scores)
+        time_score=Case(
+            When(created_at__gte=timezone.now() - timedelta(hours=24), then=20),
+            When(created_at__gte=timezone.now() - timedelta(days=7), then=10),
+            When(created_at__gte=timezone.now() - timedelta(days=30), then=5),
+            default=1,
+            output_field=IntegerField()
+        )
+    ).annotate(
+        # Final score calculation
+        final_score=F('priority_score') + F('time_score') + F('likes_count') + F('comments_count')
+    ).order_by('-final_score', '-created_at')
+
+    # Friend suggestions (exclude current friends and pending requests)
+    people = Profile.objects.filter(
+        fill_up=True, 
+        registered=True
+    ).exclude(
+        Q(uid=profile.uid) |  # Exclude self
+        Q(uid__in=friend_ids)  # Exclude existing friends
+    )
+
+    # Filtering the friend request sent list
+    my_requests = FriendRequests.objects.filter(sender=profile)
+    request_lists = [x.author for x in my_requests]
+    
+    friends = existing_friend_object.friend.all() if existing_friend_object else None
     got_requests = FriendRequests.objects.filter(author=profile)
 
+    # Handle POST request for creating posts
     if request.method == "POST":
         form = CreatePostForm(request.POST)
         if form.is_valid():
             the_form = form.save(commit=False)
-            the_form.author=profile
+            the_form.author = profile
             the_form.save()
+            
             image_no = request.POST.get('last_image')
             if image_no:
                 try:
                     for x in range(int(image_no)):
                         the_image = request.FILES.get(f'image_{x+1}')
-                        
                         if the_image:                      
-                            post_image_object = PostImage.objects.create(
-                                post=the_form,
-
-                            )
+                            post_image_object = PostImage.objects.create(post=the_form)
                             post_image_object.image = the_image
                             post_image_object.save()
-                    messages.success(request,"Post with Images uploaded successfully!")
-
+                    messages.success(request, "Post with Images uploaded successfully!")
                 except Exception as e:
                     messages.warning(request, f"Something went wrong, So Images did not uploaded, But post uploaded.")
 
@@ -57,17 +97,16 @@ def homepage(request):
     else:
         form = CreatePostForm()
 
-
     context = {
-        "posts":all_post,
-        "people":people,
-        "request_list":request_lists,
-        "got_requests":got_requests,
-        "friends":friends,
-        "form":form,
-        # "my_requests":my_requests.filter(accepted=False),
+        "posts": all_post,
+        "people": people,
+        "request_list": request_lists,
+        "got_requests": got_requests,
+        "friends": friends,
+        "form": form,
     }
     return render(request, "home/main/index.html", context)
+
 
 # ii) When accepting or rejecting request we can send notifications
 @login_requirements()
@@ -136,6 +175,33 @@ def send_friend_request(request):
             messages.warning(request, f"{e}")
     
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+@login_requirements()
+def cancel_friend_request(request):
+    if request.method == "POST":
+        try:
+            person = request.POST.get("the_person")
+            author_whom_sending_request = get_object_or_404(Profile, user__username=person.strip())
+            
+            # if the friend request exists
+            existing_request = FriendRequests.objects.filter(
+                author=author_whom_sending_request,
+                sender=request.user.profile
+            ).first()
+            
+            if existing_request:
+                existing_request.delete()
+                messages.success(request, "Friend request cancelled!")
+            else:
+                messages.error(request, "No such friend request found!")
+                
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+        except Exception as e:
+            messages.warning(request, f"{e}")
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+
 
 @login_requirements()
 def view_one_post(request, p_id):
@@ -246,7 +312,7 @@ def make_a_post(request):
     else:
         return HttpResponse("Nothing to show with this url", status=400)
 
-# -----------------------------------
+# ----------------------------------- POST LIKE RELATED ------------------------------------
 @login_requirements()
 def like_post(request, post_id):
     post = get_object_or_404(Posts, uid=post_id)
@@ -261,6 +327,42 @@ def like_post(request, post_id):
         return render(request, "home/partials/liked.html", context)
     else:
         return HttpResponse("Go Back some server misleading!")
+    
+#UPDATED: 08/06/2025==> API to return those who liked the post
+@login_requirements()
+def post_likers(request, post_id):
+    post = get_object_or_404(Posts, uid=post_id)
+    likers = post.likes.select_related('user', 'user__user').all()
+    
+    # current user's friends for the template
+    existing_friend_object = Friends.objects.filter(author=request.user.profile).first()
+    friends = existing_friend_object.friend.all() if existing_friend_object else []
+    
+    # sent friend requests
+    my_requests = FriendRequests.objects.filter(sender=request.user.profile)
+    request_list = [x.author for x in my_requests]
+    
+    if request.htmx:
+        context = {
+            "likers": likers,
+            "post": post,
+            "friends": friends,
+            "request_list": request_list,
+        }
+        return render(request, "home/partials/post_likers.html", context)
+    else:
+        return JsonResponse({
+            "likers": [
+                {
+                    "username": liker.user.user.username,
+                    "name": f"{liker.user.first_name} {liker.user.last_name}",
+                    "profile_picture": liker.user.profile_picture.url if liker.user.profile_picture else None
+                } 
+                for liker in likers
+            ]
+        })
+
+# ----------------------------------- POST LIKE RELATED END ------------------------------------
 
 # ---- WORKING - FROM - 18/07/2024 ----- (DONE)
 # NOTE: The search functionality can be improved after develop Pages and Groups feature.

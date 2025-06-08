@@ -1,5 +1,5 @@
 from django import template
-from apps.app_home.models import Posts, Friends, FriendRequests
+from apps.app_home.models import Posts, Friends, FriendRequests, Like
 from datetime import datetime
 from datetime import timedelta
 from django.utils import timezone
@@ -74,3 +74,12 @@ def brief_datetime(value):
     date_part = dt.strftime("%y/%m/%d")
     time_part = dt.strftime("%I:%M%p").lstrip("0")
     return f"{date_part}, {time_part}"
+
+
+@register.filter
+def has_liked(post, user_profile):
+    """
+    Check if a user has liked a post
+    Usage: {% if post|has_liked:user.profile %}
+    """
+    return Like.objects.filter(post=post, user=user_profile).exists()
