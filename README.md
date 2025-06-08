@@ -4,20 +4,29 @@
 
 </h4>
 
-
 <h1 align="center">
-  Bloome &nbsp;·&nbsp; Full-Stack Social Network
+  Bloome &nbsp;·&nbsp; Production-Ready Django Social Network
 </h1>
+
+<p align="center">
+  <strong>🚀 Full-Stack Social Media Platform | Real-time Chat | Smart News Feed | Open Source</strong>
+</p>
 
 <p align="center">
   <a href="https://img.shields.io/badge/version-2.0.0-red">
     <img src="https://img.shields.io/badge/version-2.0.0-red" alt="version" />
   </a>
-  <a href="https://img.shields.io/badge/bloome-fullstack_social_network-blue">
-    <img src="https://img.shields.io/badge/bloome-fullstack_social_network-blue" alt="title badge" />
+  <a href="https://img.shields.io/badge/Django-4.2+-green?logo=django">
+    <img src="https://img.shields.io/badge/Django-4.2+-green?logo=django" alt="django badge" />
   </a>
-  <a href="https://img.shields.io/badge/python-django-green">
-    <img src="https://img.shields.io/badge/python-django-green" alt="django badge" />
+  <a href="https://img.shields.io/badge/Python-3.8+-blue?logo=python">
+    <img src="https://img.shields.io/badge/Python-3.8+-blue?logo=python" alt="python badge" />
+  </a>
+  <a href="https://img.shields.io/badge/Bootstrap-5.0+-purple?logo=bootstrap">
+    <img src="https://img.shields.io/badge/Bootstrap-5.0+-purple?logo=bootstrap" alt="bootstrap badge" />
+  </a>
+  <a href="https://img.shields.io/badge/HTMX-1.8+-orange?logo=htmx">
+    <img src="https://img.shields.io/badge/HTMX-1.8+-orange?logo=htmx" alt="htmx badge" />
   </a>
   <a href="https://img.shields.io/badge/hosted%20on-render-purple?logo=render">
     <img src="https://img.shields.io/badge/hosted%20on-render-purple?logo=render" alt="render badge" />
@@ -25,8 +34,8 @@
   <a href="https://img.shields.io/badge/websockets-enabled-brightgreen?logo=fastapi">
     <img src="https://img.shields.io/badge/websockets-enabled-brightgreen?logo=fastapi" alt="ws badge" />
   </a>
-  <a href="https://img.shields.io/badge/free%20plan-auto--sleep-yellow">
-    <img src="https://img.shields.io/badge/free%20plan-auto--sleep-yellow" alt="sleep badge" />
+  <a href="https://img.shields.io/badge/License-MIT-yellow.svg">
+    <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="license badge" />
   </a>
 </p>
 
@@ -47,7 +56,7 @@
 
 ---
 
-## Live demo
+## 🌐 Live demo
 
 🌐 **URL:** <https://bloome.onrender.com>  
 🪄 **Demo account:** `demo@gmail.com` **Password:** `demo1234`  
@@ -56,20 +65,7 @@
 
 ---
 
-## 🚀 June 2025 New Update
-
-| Pillar | What’s new | Why it matters |
-|--------|------------|----------------|
-| **Architecture & DX** | Re-organised project into a layered folder structure. Added `.gitignore`, sample `.env`, and commented S3 settings. | Accelerates onboarding and prevents secrets leakage. |
-| **Real-time features** | One-to-one chat via **Django Channels** + **Daphne** (ASGI). | Demonstrates WebSocket and async proficiency. |
-| **Cloud storage** | Integrated Backblaze **B2 S3** bucket for media uploads. | Shows cost-efficient object-storage skills. |
-| **Modern hosting** | Migrated PythonAnywhere → **Render** native-ASGI. | Hands-on container/cloud deployment experience. |
-| **Email & tasks** | Automated welcome email + full **Celery + Redis** setup ready for future jobs. | Production-ready background-job architecture. |
-| **Security** | Fixed CSRF issues; secrets/hosts now env-driven. | Secure-by-default mindset. |
-
----
-
-## Feature tour
+## ✨ Feature tour
 
 - **News-feed** with likes, comments, and friend requests  
 - **Real-time chat** (WebSockets) with online presence  
@@ -81,20 +77,25 @@
 
 ---
 
-## Tech stack
+## 🛠️ Tech Stack
 
-| Layer        | Tools & Libraries                          |
-|--------------|--------------------------------------------|
-| **Frontend** | HTML / Bootstrap 5 · HTMX · CSS            |
-| **Backend**  | Django >= 4.x · Django Channels · Celery   |
-| **Async/WS** | Daphne · Redis broker                      |
-| **Database** | SQLite (dev) · MySQL (prod-ready)          |
-| **Storage**  | Backblaze B2 S3 bucket                     |
-| **CI/CD**    | GitHub Actions · Render deployment         |
+<div align="center">
+
+| **Layer** | **Technologies** | **Purpose** |
+|-----------|------------------|-------------|
+| **🎨 Frontend** | Bootstrap 5, HTMX, JavaScript, CSS3 | Responsive UI, Real-time interactions |
+| **⚙️ Backend** | Django 4.2+, Django Channels, Python 3.8+ | Web framework, WebSocket support |
+| **🔄 Real-time** | Daphne ASGI, Redis, WebSockets | Async processing, Chat, Notifications |
+| **💾 Database** | SQLite (dev), MySQL/PostgreSQL (prod) | Data persistence, Relationships |
+| **☁️ Storage** | Backblaze B2 (S3-compatible) | Media files, Static assets |
+| **🚀 Deployment** | Render, Gunicorn, UvicornWorker | Production hosting, Load balancing |
+| **📧 Tasks** | Celery, Redis Broker | Background jobs, Email sending |
+
+</div>
 
 ---
 
-## Screenshots
+## 📸 Screenshots
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/680567a2-9bf2-4f3b-93a3-3b68ff28293e" width="420" alt="newsfeed">
@@ -105,7 +106,7 @@
 
 ---
 
-## Quick Start(Local Setup)
+## 📋 Quick Start(Local Setup)
 
 Note: You can add both MySQL or SQLite database. The configuration is added in the settings.py so you just have to uncomment the code and set database host, user, password and port. 
 
@@ -143,10 +144,82 @@ python manage.py migrate
 
 ```
 
-## Author
-
-- [@emhash](https://www.github.com/emhash)
 
 
-![App Screenshot]()
 
+---
+
+## 🚀 June 2025 New Update
+
+| Pillar | What’s new | Why it matters |
+|--------|------------|----------------|
+| **Architecture & DX** | Re-organised project into a layered folder structure. Added `.gitignore`, sample `.env`, and commented S3 settings. | Accelerates onboarding and prevents secrets leakage. |
+| **Real-time features** | One-to-one chat via **Django Channels** + **Daphne** (ASGI). | Demonstrates WebSocket and async proficiency. |
+| **Cloud storage** | Integrated Backblaze **B2 S3** bucket for media uploads. | Shows cost-efficient object-storage skills. |
+| **Modern hosting** | Migrated PythonAnywhere → **Render** native-ASGI. | Hands-on container/cloud deployment experience. |
+| **Email & tasks** | Automated welcome email + full **Celery + Redis** setup ready for future jobs. | Production-ready background-job architecture. |
+| **Security** | Fixed CSRF issues; secrets/hosts now env-driven. | Secure-by-default mindset. |
+
+
+
+---
+
+## 🤝 Contributing
+
+We ❤️ contributions! Join our growing community of developers.
+
+### 🌟 **Ways to Contribute**
+- 🐛 **Bug Reports** - Help us improve
+- ✨ **Feature Requests** - Share your ideas  
+- 📝 **Documentation** - Improve our guides
+- 🔧 **Code Contributions** - Submit PRs
+- 🎨 **UI/UX Improvements** - Enhance the design
+- 🌍 **Translations** - Make it global
+
+### 🚀 **Quick Contribution Steps**
+1. **Fork** the repository
+2. **Create** your feature branch (`git checkout -b feature/AmazingFeature`)
+3. **Commit** your changes (`git commit -m 'Add AmazingFeature'`)
+4. **Push** to the branch (`git push origin feature/AmazingFeature`)
+5. **Open** a Pull Request
+
+### 🏆 **Contributors**
+
+Thanks to all our amazing contributors! 🎉
+
+<a href="https://github.com/emhash/Bloome/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=emhash/Bloome" />
+</a>
+
+---
+
+## 📊 Project Stats
+
+<div align="center">
+
+![GitHub stars](https://img.shields.io/github/stars/emhash/Bloome?style=social)
+![GitHub forks](https://img.shields.io/github/forks/emhash/Bloome?style=social)
+![GitHub watchers](https://img.shields.io/github/watchers/emhash/Bloome?style=social)
+
+![GitHub issues](https://img.shields.io/github/issues/emhash/Bloome)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/emhash/Bloome)
+![GitHub last commit](https://img.shields.io/github/last-commit/emhash/Bloome)
+
+</div>
+
+
+---
+
+<div align="center">
+
+### 🚀 **Ready to build the next big social platform?**
+
+**⭐ Star this repo** • **🍴 Fork it** • **📢 Share it** • **🤝 Contribute**
+
+**Made by [Md Emran Hossan Ashiq](https://github.com/emhash)**
+
+---
+
+*🔥 **Trending:** #Django #SocialMedia #Python #WebDevelopment #OpenSource #RealTime #FullStack*
+
+</div>
