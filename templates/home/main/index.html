@@ -85,7 +85,7 @@
             <!-- Card body END -->
             <!-- Card footer -->
             <div class="card-footer text-center py-2">
-                <a class="btn btn-link btn-sm" href="#">View Profile </a>
+                <a class="btn btn-link btn-sm" href="{% url 'view_profile' user.username %}">View Profile </a>
             </div>
             </div>
             <!-- Card END -->
@@ -212,7 +212,7 @@
                             <div class="avatar avatar-xl">
                                 <a href="#!"><img class="avatar-img rounded-circle" src="{{prsn.profile_picture.url}}" alt=""></a>
                             </div>
-                            <h6 class="card-title mb-1 mt-3"> <a href="#!"> {{prsn.first_name}} </a></h6>
+                            <h6 class="card-title mb-1 mt-3"> <a href="{% url 'view_profile' prsn.user.username %}"> {{prsn.first_name}} </a></h6>
                             <p class="mb-0 small lh-sm">5 mutual connections</p>
                         </div>
                         
@@ -312,7 +312,7 @@
                     </div>
                     <!-- Title -->
                     <div class="overflow-hidden">
-                        <a class="h6 mb-0" href="#!">{{ppl.sender.first_name}}</a>
+                        <a class="h6 mb-0" href="{% url 'view_profile' ppl.sender.user.username %}">{{ppl.sender.first_name}}</a>
                         <p class="mb-0 small text-truncate">{{ppl.sender.user.username}}</p>
                     </div>
                     <!-- Button -->
@@ -353,7 +353,7 @@
                 </div>
                 <!-- Title -->
                 <div class="overflow-hidden">
-                    <a class="h6 mb-0" href="#!">{{frnd.first_name}}</a>
+                    <a class="h6 mb-0" href="{% url 'view_profile' frnd.user.username %}">{{frnd.first_name}}</a>
                     <p class="mb-0 small text-truncate">{{frnd.user.username}}</p>
                 </div>
                 <!-- Button -->
