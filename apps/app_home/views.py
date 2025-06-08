@@ -12,6 +12,7 @@ from django.db.models import Q, Case, When, IntegerField, F, Count
 from django.utils import timezone
 from datetime import timedelta
 
+# UPDATED: 8/06/2025
 @login_requirements()
 def homepage(request):
     # Current logged in user profile
@@ -311,7 +312,7 @@ def make_a_post(request):
     else:
         return HttpResponse("Nothing to show with this url", status=400)
 
-# -----------------------------------
+# ----------------------------------- POST LIKE RELATED ------------------------------------
 @login_requirements()
 def like_post(request, post_id):
     post = get_object_or_404(Posts, uid=post_id)
@@ -326,6 +327,42 @@ def like_post(request, post_id):
         return render(request, "home/partials/liked.html", context)
     else:
         return HttpResponse("Go Back some server misleading!")
+    
+#UPDATED: 08/06/2025==> API to return those who liked the post
+@login_requirements()
+def post_likers(request, post_id):
+    post = get_object_or_404(Posts, uid=post_id)
+    likers = post.likes.select_related('user', 'user__user').all()
+    
+    # current user's friends for the template
+    existing_friend_object = Friends.objects.filter(author=request.user.profile).first()
+    friends = existing_friend_object.friend.all() if existing_friend_object else []
+    
+    # sent friend requests
+    my_requests = FriendRequests.objects.filter(sender=request.user.profile)
+    request_list = [x.author for x in my_requests]
+    
+    if request.htmx:
+        context = {
+            "likers": likers,
+            "post": post,
+            "friends": friends,
+            "request_list": request_list,
+        }
+        return render(request, "home/partials/post_likers.html", context)
+    else:
+        return JsonResponse({
+            "likers": [
+                {
+                    "username": liker.user.user.username,
+                    "name": f"{liker.user.first_name} {liker.user.last_name}",
+                    "profile_picture": liker.user.profile_picture.url if liker.user.profile_picture else None
+                } 
+                for liker in likers
+            ]
+        })
+
+# ----------------------------------- POST LIKE RELATED END ------------------------------------
 
 # ---- WORKING - FROM - 18/07/2024 ----- (DONE)
 # NOTE: The search functionality can be improved after develop Pages and Groups feature.
