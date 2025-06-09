@@ -148,6 +148,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 CSRF_TRUSTED_ORIGINS += ["https://*.onrender.com"]
+CSRF_TRUSTED_ORIGINS += ["https://*.ngrok-free.app"]
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
@@ -171,9 +172,8 @@ LIVE_SITE_URL_RN=os.getenv('LIVE_SITE_URL_RN', 'http://localhost:8000/')
 
 
 # ---------- STORAGE SETTINGS -------------
-
-MEDIA_DIR = os.path.join(BASE_DIR , 'media')
-MEDIA_URL = '/media/'
-MEDIA_ROOT = MEDIA_DIR
-
 from ..credentials.cloud_storage import *
+
+# MEDIA_DIR = os.path.join(BASE_DIR , 'media')
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = MEDIA_DIR

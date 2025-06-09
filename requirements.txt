@@ -23,6 +23,7 @@ cryptography==43.0.0
 daphne==4.1.2
 defusedxml==0.7.1
 Django==4.2.11
+django-allauth==65.9.0
 django-htmx==1.18.0
 django-storages==1.14.6
 hyperlink==21.0.0

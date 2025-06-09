@@ -9,4 +9,7 @@ urlpatterns = [
     # demo for user testing and visit my site
     path('demo/login/', views.demo_login, name="demo_login"),
 
+    # Google Auth
+    path('google-auth/', views.google_login, name="google_login"),
+    path('google/callback/', views.google_callback, name="google_callback"),
 ]
