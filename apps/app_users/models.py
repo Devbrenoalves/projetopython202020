@@ -86,6 +86,17 @@ class Profile(CommonBaseModel):
     address = models.CharField(max_length=250, null=True, blank=True)
     status=models.CharField(max_length=20, choices=RELATIONS, default="single")
 
+
+    google_email = models.EmailField(blank=True, null=True)
+    access_token = models.CharField(max_length=500, blank=True, null=True)
+    refresh_token = models.CharField(max_length=500, blank=True, null=True)
+    id_token = models.CharField(max_length=500, blank=True, null=True)
+    token_expiry = models.DateTimeField(blank=True, null=True)
+    display_name = models.CharField(max_length=100, blank=True, null=True)
+    locale = models.CharField(max_length=50, blank=True, null=True)
+    verified_email = models.BooleanField(default=False)
+
+
     def save(self, *args, **kwargs):
         if not self.profile_picture:
             self.profile_picture = "default.png"

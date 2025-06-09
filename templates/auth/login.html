@@ -11,7 +11,17 @@
     <h1 class="mb-2">Authentication</h1>
     <p>Enter the email and password to sign in with your account.</p>
     <!-- form START -->
+      <!-- Google Login Button -->
+      <div class="d-grid mb-3">
+        <a href="{% url 'google_login' %}" class="btn btn-lg btn-outline-danger">
+            <i class="bi bi-google me-2"></i> Continue with Google
+        </a>
+    </div>
     
+    <div class="text-center mb-0">
+        <span class="text-muted">or</span>
+    </div>
+  
     <form class="mt-sm-4" method="POST" novalidate>
         {% csrf_token %}
         <!-- Email -->
