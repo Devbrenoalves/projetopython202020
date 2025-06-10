@@ -1,6 +1,6 @@
 from .settings import *
 
-DEBUG = os.getenv("DEBUG", "True")
+DEBUG = os.getenv("DEBUG", "False")
 
 if DEBUG:
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
