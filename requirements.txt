@@ -22,10 +22,12 @@ constantly==23.10.4
 cryptography==43.0.0
 daphne==4.1.2
 defusedxml==0.7.1
+dj-database-url==3.0.0
 Django==4.2.11
-django-allauth==0.63.6
+django-allauth==65.9.0
 django-htmx==1.18.0
 django-storages==1.14.6
+gunicorn==23.0.0
 hyperlink==21.0.0
 idna==3.7
 incremental==24.7.2
@@ -37,6 +39,7 @@ oauthlib==3.2.2
 packaging==25.0
 pillow==10.3.0
 prompt_toolkit==3.0.51
+psycopg2-binary==2.9.10
 pyasn1==0.6.0
 pyasn1_modules==0.4.0
 pycparser==2.22
@@ -60,4 +63,5 @@ tzdata==2025.2
 urllib3==2.0.7
 vine==5.1.0
 wcwidth==0.2.13
+whitenoise==6.9.0
 zope.interface==7.0.1

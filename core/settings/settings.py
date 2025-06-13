@@ -10,6 +10,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # ------- COMMON CODE FOR HANDLE MEDA, STATIC and TEMPLATES ---------
 TEMPLATE_DIR = os.path.join(BASE_DIR , 'templates')
 STATIC_URL = 'static/'
+STATIC_DIR = os.path.join(BASE_DIR , 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # -------------=====> EXTRA <=====------------------
 AUTH_USER_MODEL = 'app_users.User'
@@ -23,6 +25,7 @@ ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 
 INSTALLED_APPS = [
     # ------- Created and 3rd party apps ---------
+    'whitenoise.runserver_nostatic',
     'storages',
     'daphne',
     'channels',
@@ -33,7 +36,8 @@ INSTALLED_APPS = [
     'apps.app_chat',
     'apps.app_home',
     'apps.app_account',
-    
+    'apps.app_websocket',
+    'apps.app_notification',
     # --------- In Built Apps ---------
     'django.contrib.admin',
     'django.contrib.auth',
@@ -44,6 +48,7 @@ INSTALLED_APPS = [
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -149,10 +154,12 @@ CSRF_TRUSTED_ORIGINS = [
 
 CSRF_TRUSTED_ORIGINS += ["https://*.onrender.com"]
 CSRF_TRUSTED_ORIGINS += ["https://*.ngrok-free.app"]
+CSRF_TRUSTED_ORIGINS += ["https://*.koyeb.app"]
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
+    "https://*.koyeb.app",
     "https://bloome.onrender.com",
     "http://bloome.onrender.com",
     "https://bloome.onrender.com/",

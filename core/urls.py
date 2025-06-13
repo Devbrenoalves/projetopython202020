@@ -10,6 +10,7 @@ urlpatterns = [
     path('', include("apps.app_home.urls")),
     path('auth/', include("apps.app_users.urls")),
     path('account/', include("apps.app_account.urls")),
+    path('notification/', include("apps.app_notification.urls")),
     path('admin/', admin.site.urls),
     
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),

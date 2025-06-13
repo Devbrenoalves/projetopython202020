@@ -1,6 +1,7 @@
 from .settings import *
 
-DEBUG = os.getenv("DEBUG", "True")
+# DEBUG = os.getenv("DEBUG", 'False').lower() in ('true', '1', 't')
+DEBUG = False
 
 if DEBUG:
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
@@ -17,8 +18,7 @@ DATABASES = {
     }
 }
 
-
-
+print(f"------>>> DEBUG : {DEBUG} <<<<------")
 # ------- MYSQL Database Setup ------------
 # DATABASES = {
 #     'default': {
@@ -33,17 +33,26 @@ DATABASES = {
 
 # ----- PostgreSQL Database Setup ------------
 # DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': os.getenv('DB_NAME', 'your_db_name'),
-#         'USER': os.getenv('DB_USER', 'your_db_user'),
-#         'PASSWORD': os.getenv('DB_PASSWORD', 'your_db_password'),
-#         'HOST': os.getenv('DB_HOST', 'localhost'),
-#         'PORT': os.getenv('DB_PORT', '5432'),
-#     }
+#   'default': {
+#     'ENGINE': 'django.db.backends.postgresql',
+#     'HOST': os.getenv('PGHOST'),
+#     'PORT': os.getenv('PGPORT'),
+#     'NAME': os.getenv('PGDATABASE'),
+#     'USER': os.getenv('PGUSER'),
+#     'PASSWORD': os.getenv('PGPASSWORD'),
+#     'OPTIONS': {'sslmode': 'require'},
+#   }
 # }
 
+# import dj_database_url
 
+# DATABASES = {
+#     'default': dj_database_url.parse(
+#         os.getenv('DATABASE_URL'),
+#         conn_max_age=600,
+#         ssl_require=True
+#     )
+# }
 
 
 # ============== STORAGE SETTINGS (NOT USING NOW )==============
