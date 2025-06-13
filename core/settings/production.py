@@ -1,7 +1,7 @@
 from .settings import *
 
 # DEBUG = os.getenv("DEBUG", 'False').lower() in ('true', '1', 't')
-DEBUG = False
+DEBUG = True
 
 if DEBUG:
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
@@ -11,12 +11,12 @@ else:
 
 
 # ----- in pythonanwhere Using SQLite Database Setup ------------
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 print(f"------>>> DEBUG : {DEBUG} <<<<------")
 # ------- MYSQL Database Setup ------------
@@ -53,7 +53,21 @@ print(f"------>>> DEBUG : {DEBUG} <<<<------")
 #         ssl_require=True
 #     )
 # }
+db_name = os.getenv('DB_NAME', '')
+db_user = os.getenv('DB_USER', '')
+db_password = os.getenv('DB_PASSWORD', '')
+db_host = os.getenv('DB_HOST', '')
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'HOST': f'{db_host}',
+        'NAME': f'{db_name}',
+        'USER': f'{db_user}',
+        'PASSWORD': f'{db_password}',
+        'OPTIONS': {'sslmode': 'require'},
+    }
+}
 
 # ============== STORAGE SETTINGS (NOT USING NOW )==============
 
