@@ -96,7 +96,10 @@ class Profile(CommonBaseModel):
     locale = models.CharField(max_length=50, blank=True, null=True)
     verified_email = models.BooleanField(default=False)
 
-
+    @property
+    def unseen_notifications_count(self):
+        return self.notifications.filter(seen=False).count()
+    
     def save(self, *args, **kwargs):
         if not self.profile_picture:
             self.profile_picture = "default.png"

@@ -58,7 +58,7 @@ def chat_room(request, room_name):
     context = {
         'room_name':  room_name,
         'other_user': other_user,
-        'chats':      chats,
+        'chats': chats,
         'search_query': search_query,
         'user_last_messages': user_last_messages,
     }
@@ -66,22 +66,3 @@ def chat_room(request, room_name):
     if request.headers.get('Hx-Request'):
         return render(request, 'chat/_conversation.html', context)
     return render(request, 'chat/main/messenger.html', context)
-
-
-
-
-
-
-
-# def messages(request, u_id):
-    
-#     receiver = get_object_or_404(Profile, uid=u_id)
-#     # messages = Message.objects.filter(
-#     #     (Q(sender=request.user) & Q(receiver=receiver)) |
-#     #     (Q(sender=receiver) & Q(receiver=request.user))
-#     # ).order_by("created_at")
-
-#     context = {"receiver": receiver, "messages": messages}
-
-#     return render(request, "chat/partials/messages.html", )
-

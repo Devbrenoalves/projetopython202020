@@ -258,5 +258,65 @@
     {% endcomment %}
     <script src="{% static "js/functions.js" %}"></script>
     {% block js %}{% endblock js %}
+
+
+    <script>
+      ;(function(){
+        const loc   = window.location;
+        const proto = loc.protocol === "https:" ? "wss://" : "ws://";
+        const wsUrl = proto + loc.host + "/ws/notifications/";
+      
+        const dotTag    = document.getElementById("notification-dot");
+        const bellIcon  = document.getElementById("notification-bell");
+        const listUl    = document.getElementById("notification-list");
+        const headerCt  = document.getElementById("notification-count");
+      
+        const socket = new WebSocket(wsUrl);
+      
+        socket.onopen = () => console.log("🔔 WS connected for notifications");
+      
+        socket.onmessage = ({ data }) => {
+          const note = JSON.parse(data);
+          // 1) update the red dot count only
+          dotTag.textContent = note.count > 0 ? note.count : "";
+      
+          // 2) also update the header “X new”
+          headerCt.textContent = `${note.count} new`;
+      
+          // 3) shake the bell
+          bellIcon.classList.add("bell-shake");
+          setTimeout(() => bellIcon.classList.remove("bell-shake"), 600);
+      
+          // 4) prepend the new notification li
+          const li = document.createElement("li");
+          li.innerHTML = `
+            <a href="${note.link||'#'}"
+               class="badge-unread list-group-item list-group-item-action
+                      rounded d-flex border-0 p-3 mb-1">
+              <div class="avatar text-center d-none d-sm-inline-block">
+                <img class="avatar-img rounded-circle"
+                     src="{% static 'images/notify.svg' %}"
+                     alt="">
+              </div>
+              <div class="ms-sm-3 d-flex">
+                <p class="small mb-2">
+                  <b>${note.category||'Notice'}:</b>
+                  ${note.notification}
+                </p>
+                <p class="small ms-3 text-nowrap">
+                  ${new Date(note.timestamp).toLocaleTimeString()}
+                </p>
+              </div>
+            </a>`;
+          listUl.prepend(li);
+        };
+      
+        socket.onclose = () => console.log("🔔 WS closed");
+        socket.onerror = e => console.error("🔔 WS error", e);
+      })();
+      </script>
+      
+  
+
   </body>
 </html>

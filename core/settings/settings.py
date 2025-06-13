@@ -33,7 +33,8 @@ INSTALLED_APPS = [
     'apps.app_chat',
     'apps.app_home',
     'apps.app_account',
-    
+    'apps.app_websocket',
+    'apps.app_notification',
     # --------- In Built Apps ---------
     'django.contrib.admin',
     'django.contrib.auth',
