@@ -148,8 +148,9 @@
               </a>
             </li>
             <li class="nav-item ms-2">
-              <a class="nav-link bg-light icon-md btn btn-light p-0" href="{% url "inbox" %}">
-              <i class="bi bi-envelope-fill fs-6"> </i>
+              <a class="nav-link bg-light icon-md btn btn-light p-0 position-relative" href="{% url "inbox" %}">
+                <span id="message-dot" class="red-dot-custom"></span>
+                <i id="message-envelope" class="bi bi-envelope-fill fs-6"> </i>
               </a>
             </li>
             <li class="nav-item ms-2">
@@ -280,7 +281,7 @@
           // 1) update the red dot count only
           dotTag.textContent = note.count > 0 ? note.count : "";
       
-          // 2) also update the header “X new”
+          // 2) also update the header "X new"
           headerCt.textContent = `${note.count} new`;
       
           // 3) shake the bell
@@ -316,6 +317,40 @@
       })();
       </script>
       
+      <!-- Messages unread badge WS -->
+      <script>
+      ;(function(){
+        const loc   = window.location;
+        const proto = loc.protocol === "https:" ? "wss://" : "ws://";
+        const wsUrl = proto + loc.host + "/ws/messages/";
+
+        const dotTag   = document.getElementById("message-dot");
+        const envelope = document.getElementById("message-envelope");
+
+        const socket = new WebSocket(wsUrl);
+        socket.onopen  = () => console.log("✉️ WS connected for messages");
+        socket.onclose = () => console.log("✉️ WS closed");
+        socket.onerror = e  => console.error("✉️ WS error", e);
+
+        socket.onmessage = ({data}) => {
+          const payload = JSON.parse(data);
+          const total   = payload.count || 0;
+          dotTag.textContent = total > 0 ? total : "";
+
+          if (total > 0) {
+            envelope.classList.add("bell-shake");
+            setTimeout(() => envelope.classList.remove("bell-shake"), 600);
+          }
+
+          if (payload.sender) {
+            const perSpan = document.getElementById(`conv-dot-${payload.sender}`);
+            if (perSpan) {
+              perSpan.textContent = payload.sender_unread > 0 ? payload.sender_unread : "";
+            }
+          }
+        };
+      })();
+      </script>
   
 
   </body>

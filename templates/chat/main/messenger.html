@@ -57,8 +57,14 @@
                         hx-get="{% url 'messages' friend.user.username %}"
                         hx-target="#chat-pane"
                         hx-swap="innerHTML"
-                        class="nav-link text-start">
+                        class="nav-link text-start position-relative"
+                        data-username="{{ friend.user.username }}">
 
+                        <span id="conv-dot-{{ friend.user.username }}"
+                              class="red-dot-custom"
+                              style="left:90%;top:5%;{% if not friend.unread_count %}display:none;{% endif %}">
+                              {% if friend.unread_count %}{{ friend.unread_count }}{% endif %}
+                        </span>
 
                         <div class="d-flex">
                           <div class="flex-shrink-0 avatar avatar-story me-2 status-online">

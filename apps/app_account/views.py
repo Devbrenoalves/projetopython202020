@@ -79,6 +79,25 @@ def setting_tabs(request, option):
             context={"form":form}
             return render(request,"settings/partials/privacy.html", context)
         
+        elif option=="password":
+            if request.user.email == 'demo@gmail.com' or request.user.username == 'demo':
+                messages.error(request, "You cannot change password for demo account!")
+                return redirect("setting_tabs", option="password")
+            
+            from django.contrib.auth.forms import PasswordChangeForm
+            from django.contrib.auth import update_session_auth_hash
+            if request.method=="POST":
+                form = PasswordChangeForm(user=request.user, data=request.POST)
+                if form.is_valid():
+                    user = form.save()
+                    update_session_auth_hash(request, user)  # keep login
+                    messages.success(request, "Password updated successfully!")
+                    return redirect("setting_tabs", option="password")
+            else:
+                form = PasswordChangeForm(user=request.user)
+            context = {"form": form}
+            return render(request,"settings/partials/password.html", context)
+        
     return HttpResponse("Are you losted? Go back where you came from!")
 
 
