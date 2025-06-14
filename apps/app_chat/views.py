@@ -7,12 +7,19 @@ from django.contrib.auth.decorators import login_required
 from apps.app_users.models import User
 from apps.app_users.models import Profile
 from apps.app_home.models import Friends
+import json
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 
 
 def inbox(request):
     profile = request.user.profile
     existing_friend_object = Friends.objects.filter(author=profile).first()
     friends = existing_friend_object.friend.all() if existing_friend_object else None
+
+    if friends is not None:
+        for f in friends:
+            f.unread_count = Message.objects.filter(sender=f.user, receiver=request.user, is_read=False).count()
 
     context = {
         'friends': friends,
@@ -33,6 +40,25 @@ def chat_room(request, room_name):
         (Q(sender=request.user,   receiver=other_user)) |
         (Q(sender=other_user,     receiver=request.user))
     ).order_by('timestamp')
+
+    # mark messages from other_user to request.user as read
+    unread_qs = Message.objects.filter(sender=other_user, receiver=request.user, is_read=False)
+    unread_qs.update(is_read=True)
+
+    # after updating, broadcast new unread count
+    channel_layer = get_channel_layer()
+    total_unread = Message.objects.filter(receiver=request.user, is_read=False).count()
+    async_to_sync(channel_layer.group_send)(
+        f"messages_{request.user.uid}",
+        {
+            "type": "send.message_count",
+            "value": json.dumps({
+                "count": total_unread,
+                "sender": other_user.username,
+                "sender_unread": 0,
+            }),
+        }
+    )
 
     if search_query:
         chats = chats.filter(content__icontains=search_query)

@@ -1,7 +1,7 @@
 from .settings import *
 
 # DEBUG = os.getenv("DEBUG", 'False').lower() in ('true', '1', 't')
-DEBUG = True
+DEBUG = False
 
 if DEBUG:
     STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]

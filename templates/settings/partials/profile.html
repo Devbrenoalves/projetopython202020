@@ -13,7 +13,7 @@
     <div class="card-body">
     <!-- Form settings START -->
 
-    <form class="row g-3" method="POST" enctype="multipart/form-data" novalidate>
+    <form class="row g-3" method="POST" enctype="multipart/form-data" hx-encoding="multipart/form-data" hx-post="{% url 'setting_tabs' 'profile' %}" hx-target="#tab-option-to-change" hx-swap="innerHTML" novalidate>
         {% csrf_token %}
         <div class="col-sm-6 col-lg-4">
             {{form.first_name.label}}
@@ -118,11 +118,7 @@
         <!-- Button  -->
         <div class="col-12 text-end">
             <a href="{% url "logout" %}" class="btn btn-sm btn-warning">Log Out</a>
-        <button 
-        hx-post="{% url "setting_tabs" "profile" %}"
-        hx-target="#tab-option-to-change"
-        hx-swap="innerHTML"
-        type="submit" class="btn btn-sm btn-primary mb-0">Save changes</button>
+        <button type="submit" class="btn btn-sm btn-primary mb-0">Save changes</button>
         </div>
     </form>
     
@@ -130,3 +126,4 @@
 <!-- Card body END -->
 </div>
 <!-- Account settings END -->
+</div>

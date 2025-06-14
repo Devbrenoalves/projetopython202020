@@ -30,9 +30,23 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         await self.save_message(sender, receiver, message)
 
+        # new: compute unread count for receiver and broadcast
+        unread_total = await self.get_unread_count(receiver)
+        sender_unread = await self.get_unread_from_sender(receiver, sender)
+        await self.channel_layer.group_send(
+            f"messages_{receiver.uid}",
+            {
+                "type": "send.message_count",
+                "value": json.dumps({
+                    "count": unread_total,
+                    "sender": sender.username,
+                    "sender_unread": sender_unread,
+                }),
+            }
+        )
+
         await self.channel_layer.group_send(
             self.room_group_name,
-            
             {
                 'type': 'chat_message',
                 'sender': sender.username,
@@ -61,6 +75,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @sync_to_async
     def get_receiver_user(self):
         return User.objects.get(username=self.room_name)
+
+    @sync_to_async
+    def get_unread_count(self, user):
+        return Message.objects.filter(receiver=user, is_read=False).count()
+
+    @sync_to_async
+    def get_unread_from_sender(self, receiver, sender):
+        return Message.objects.filter(receiver=receiver, sender=sender, is_read=False).count()
 
 
 class NotificationConsumerTest(WebsocketConsumer):
@@ -117,4 +139,27 @@ class NotificationConsumer(AsyncWebsocketConsumer):
 
     # send.notification must match the "type" above
     async def send_notification(self, event):
+        await self.send(text_data=event["value"])
+
+
+class MessageCountConsumer(AsyncWebsocketConsumer):
+    async def connect(self):
+        user = self.scope["user"]
+        if user.is_anonymous:
+            await self.close()
+            return
+
+        self.group_name = f"messages_{user.uid}"
+        await self.channel_layer.group_add(self.group_name, self.channel_name)
+        await self.accept()
+
+        # send initial unread count
+        from apps.app_chat.models import Message
+        count = await database_sync_to_async(Message.objects.filter(receiver=user, is_read=False).count)()
+        await self.send(text_data=json.dumps({"count": count}))
+
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard(self.group_name, self.channel_name)
+
+    async def send_message_count(self, event):
         await self.send(text_data=event["value"])
