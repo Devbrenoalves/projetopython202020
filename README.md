@@ -36,7 +36,6 @@
 ## 🌐 Live demo
 
 🪄 **Demo account:** `demo@gmail.com` **Password:** `demo1234`  
-https://bloome.onrender.com
 
 ---
 
