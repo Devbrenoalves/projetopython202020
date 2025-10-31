@@ -112,8 +112,6 @@ python manage.py migrate
 
 ---
 
-## 🚀 June 2025 New Update
-
 | Pillar | What’s new | Why it matters |
 |--------|------------|----------------|
 | **Architecture & DX** | Re-organised project into a layered folder structure. Added `.gitignore`, sample `.env`, and commented S3 settings. | Accelerates onboarding and prevents secrets leakage. |
