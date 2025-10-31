@@ -21,7 +21,7 @@ LOGIN_URL = "/auth/login/"
 
 
 SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-secret-key')
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 INSTALLED_APPS = [
     # ------- Created and 3rd party apps ---------
@@ -116,7 +116,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'Asia/Dhaka'
+TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
 USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -149,7 +149,6 @@ CSRF_TRUSTED_ORIGINS = [
     "http://35.164.95.156",
     "http://44.230.95.183",
     "http://44.229.200.200",
-
 ]
 
 CSRF_TRUSTED_ORIGINS += ["https://*.onrender.com"]
@@ -179,8 +178,10 @@ LIVE_SITE_URL_RN=os.getenv('LIVE_SITE_URL_RN', 'http://localhost:8000/')
 
 
 # ---------- STORAGE SETTINGS -------------
-from ..credentials.cloud_storage import *
+# Comente o storage na nuvem
+# from ..credentials.cloud_storage import *
 
-# MEDIA_DIR = os.path.join(BASE_DIR , 'media')
-# MEDIA_URL = '/media/'
-# MEDIA_ROOT = MEDIA_DIR
+# Ative armazenamento local
+MEDIA_DIR = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+MEDIA_ROOT = MEDIA_DIR
