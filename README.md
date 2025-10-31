@@ -37,8 +37,6 @@
 
 🪄 **Demo account:** `demo@gmail.com` **Password:** `demo1234`  
 
-⚠️ *Free tier sleeps after 15 min idle; first hit may take ~30 s to spin up.*
-
 ---
 
 ## ✨ Feature tour
