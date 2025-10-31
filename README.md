@@ -1,9 +1,3 @@
-<h4 align='center'>
-  
-![Logo](https://github.com/user-attachments/assets/8e784d01-0977-410a-ae11-7ebc30a08061)
-
-</h4>
-
 <h1 align="center">
   Bloome &nbsp;·&nbsp; Production-Ready Django Social Network
 </h1>
