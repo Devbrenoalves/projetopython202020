@@ -33,10 +33,6 @@
   </a>
 </p>
 
-## 🌐 Live demo
-
-🪄 **Demo account:** `demo@gmail.com` **Password:** `demo1234`  
-
 ---
 
 ## ✨ Feature tour
